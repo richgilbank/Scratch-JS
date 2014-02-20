@@ -1,4 +1,4 @@
-ES6 Repl Chrome Extension
+[ES6 Repl Chrome Extension](https://chrome.google.com/webstore/detail/es6-repl/alploljligeomonipppgaahpkenfnfkn)
 =========================
 
 A Chrome DevTools extension with Google's [Traceur](https://github.com/google/traceur-compiler) transpiler.
