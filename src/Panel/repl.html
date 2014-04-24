@@ -1,173 +1,24 @@
 <html>
 <head>
 <title>Traceur</title>
+
 <link rel="stylesheet" href="codemirror/codemirror.css">
-<script src="codemirror/codemirror.js"></script>
-<script src="codemirror/javascript.js"></script>
-<script src="traceur.js"></script>
-<link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Droid+Sans+Mono|Droid+Sans">
-<style>
+<link rel="stylesheet" href="codemirror/solarized.css">
+<link rel="stylesheet" href="repl.css">
 
-html, body {
-  margin: 0;
-  font-family: 'Lucida Grande', sans-serif;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-.CodeMirror-scroll {
-  border: 1px solid #ddd;
-  height: auto;
-  min-height: 300px;
-}
-
-html.hide-output .output-wrapper {
-  display: none;
-}
-
-.CodeMirror {
-  width: -webkit-calc(50% - 15px);
-  width: calc(50% - 15px);
-}
-
-html.hide-output .CodeMirror {
-  width: -webkit-calc(100% - 20px);
-  width: calc(100% - 20px);
-}
-
-h1 {
-  margin: 5px;
-}
-
-textarea,
-pre,
-.CodeMirror {
-  font: 12px 'Droid Sans Mono', sans-serif;
-  margin: 5px;
-}
-
-.error {
-  color: red;
-}
-
-.options-area {
-  position: relative;
-  height: 25px;
-}
-
-.repl-button {
-  background: black;
-  border-radius: 5px;
-  border: 0;
-  box-shadow: 1px 1px 4px rgba(0, 0, 0, .5);
-  color: white;
-  display: inline-block;
-  font: 13px/20px 'Droid Sans', sans-serif;
-  margin: 0;
-  padding: 4px 10px;
-  position: relative;
-  text-decoration: none;
-}
-
-.menu-container {
-  position: relative;
-}
-
-.options {
-  background: black;
-  border-radius: 5px;
-  box-shadow: 1px 1px 5px rgba(0, 0, 0, .5);
-  color: white;
-  font: 13px/20px 'Droid Sans', sans-serif;
-  margin-top: -5px;
-  padding: 10px;
-  position: absolute;
-  right: 0;
-  width: 32ex;
-  z-index: 10;
-}
-
-.options label {
-  display: block;
-}
-
-.options label > input {
-  vertical-align: -2px;
-  margin: 0 1ex 0 0;
-}
-
-.options hr {
-  background: white;
-  border: 0;
-  height: 1px;
-}
-
-.god0 {
-  color: red;
-  -webkit-transition:color 1s ease-in-out;
-  transition: color 1s ease-in-out;
-}
-
-.god1 {
-  color: yellow;
-  -webkit-transition: color 1s ease-in-out;
-  transition: color 1s ease-in-out
-}
-
-.vbox {
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-}
-
-.hbox {
-  display: flex;
-  flex-direction: row;
-  flex: 1;
-  justify-content: space-around;
-  width: 100%;
-}
-
-.stretch {
-  flex: 2;
-}
-
-.hbox.center {
-  align-items: center;
-}
-
-</style>
 </head>
 <body>
 
-<div class='hbox center'>
-  <a class="repl-button" href="http://github.com/google/traceur-compiler" target="_blank">Source</a>
-  <div class="menu-container">
-    <button class="repl-button option-button">Options</button>
-    <div class="options" hidden>
-      <label><input class="eval" type="checkbox" checked>Evaluate</label>
-      <label><input class="output" type="checkbox" checked>Show generated code</label>
-      <label><input class="show-all-toggle" type="checkbox">Show all options</label>
-      <hr>
-      <div class="traceur-options"></div>
-      <button class="reset-all">Reset All Options</button>
-      <button class="all-off">All Options Off</button>
-    </div>
-  </div>
-</div>
+<textarea></textarea>
+<button>Run it (&#8984;&#8617;)</button>
 
-<div class='hbox'>
-  <textarea class="input" hidden></textarea>
-  <textarea class="output" hidden></textarea>
-</div>
+<script type="text/javascript" src="repl.js"></script>
 
-<div class='hbox'>
-  <pre class="error"></pre>
-  <pre class="source-map"></pre>
-</div>
+<script src="codemirror/codemirror.js"></script>
+<script src="codemirror/matchbrackets.js"></script>
+<script src="codemirror/continuecomment.js"></script>
+<script src="codemirror/comment.js"></script>
+<script src="codemirror/javascript.js"></script>
 
-<script src="repl-import.js" type="text/javascript"></script>
 </body>
 </html>

@@ -1,0 +1,23 @@
+body {
+  background: #002b36;
+}
+
+button {
+  padding: 10px 15px;
+  background: #3b89f3;
+  border-radius: 10px;
+  border: none;
+  color: #fff;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  font-size: 14px;
+}
+button:focus {
+  outline: none;
+}
+button:active {
+  background: #1f72e3;
+  padding: 11px 15px 9px 15px;
+}
+
