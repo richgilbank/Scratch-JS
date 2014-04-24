@@ -7,4 +7,4 @@ A Chrome DevTools extension with Google's [Traceur](https://github.com/google/tr
 
 =========================
 
-Copyright 2014 Rich Gilbank. Released under the MIT License.
+Traceur belongs to Google. Everything else is MIT.
