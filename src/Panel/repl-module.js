@@ -12,15 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-console._log = console.log;
-console.log = function() {
-  var strings = [];
-  for(var i=0; i < arguments.length; i++){
-    strings.push(JSON.stringify(arguments[i]));
-  }
-  var wrappedString = 'console.log(' + strings.join(',') + ')';
-  chrome.devtools.inspectedWindow.eval(wrappedString);
+var deliverContent = function(content){
+  chrome.runtime.sendMessage({content: content});
 }
+
 
 import {ErrorReporter} from 'traceur@0.0/src/util/ErrorReporter';
 import {options as traceurOptions} from 'traceur@0.0/src/options';
@@ -107,6 +102,10 @@ function compile() {
 
   var name = 'repl';
   var contents = input.getValue();
+
+  // Send to content script
+  deliverContent(contents);
+
   if (history.replaceState)
     history.replaceState(null, document.title,
                          '#' + encodeURIComponent(contents));

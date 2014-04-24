@@ -3,6 +3,5 @@ chrome.devtools.panels.create(
   '30.png',
   'Panel/repl.html',
   function(panel) {
-    console.log('here', panel);
   }
 );
