@@ -8,7 +8,9 @@
     "128": "128.png"
   },
   "background": {
-    "scripts": ["background.js"]
+    "scripts": [
+      "background.js"
+    ]
   },
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],

@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', function(){
   editor.setOption('theme', 'solarized dark');
 
   var deliverContent = function(content){
-    console.log('delivering ', content);
     chrome.runtime.sendMessage({content: content});
   }
 
