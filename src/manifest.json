@@ -15,7 +15,7 @@
   "content_scripts": [{
     "matches": ["http://*/*", "https://*/*"],
     "js": [
-      "traceur.js",
+      "node_modules/traceur/bin/traceur.js",
       "content.js"
     ]
   }],
