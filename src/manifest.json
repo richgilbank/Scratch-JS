@@ -1,6 +1,6 @@
 {
   "name": "ES6 Repl",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "ES6 transpiler based on Traceur",
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
