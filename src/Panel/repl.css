@@ -1,5 +1,6 @@
 body {
   background: #002b36;
+  font-size: 100%;
 }
 
 button {
@@ -20,4 +21,3 @@ button:active {
   background: #1f72e3;
   padding: 11px 15px 9px 15px;
 }
-
