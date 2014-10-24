@@ -10,7 +10,9 @@ document.addEventListener('DOMContentLoaded', function(){
   editor.setOption('theme', 'solarized dark');
 
   var deliverContent = function(content){
-    chrome.runtime.sendMessage({content: content});
+    traceur.options.experimental = true;
+    var es5 = traceur.Compiler.script(content);
+    chrome.devtools.inspectedWindow.eval(es5)
   }
 
   document.onkeydown = function(e){

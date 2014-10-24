@@ -1,26 +1,13 @@
 {
   "name": "ES6 Repl",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "ES6 transpiler based on Traceur",
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
   "icons": {
     "128": "128.png"
   },
-  "background": {
-    "scripts": [
-      "background.js"
-    ]
-  },
-  "content_scripts": [{
-    "matches": ["http://*/*", "https://*/*"],
-    "js": [
-      "node_modules/traceur/bin/traceur.js",
-      "content.js"
-    ]
-  }],
   "permissions": [
-    "<all_urls>",
     "storage",
     "tabs"
   ]
