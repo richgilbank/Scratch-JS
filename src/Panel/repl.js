@@ -11,8 +11,13 @@ document.addEventListener('DOMContentLoaded', function(){
 
   var deliverContent = function(content){
     traceur.options.experimental = true;
-    var es5 = traceur.Compiler.script(content);
-    chrome.devtools.inspectedWindow.eval(es5)
+    try {
+      var es5 = traceur.Compiler.script(content);
+      chrome.devtools.inspectedWindow.eval(es5)
+    }
+    catch (e) {
+      chrome.devtools.inspectedWindow.eval("console.error(\"" + e + "\");");
+    }
   }
 
   document.onkeydown = function(e){
@@ -25,4 +30,3 @@ document.addEventListener('DOMContentLoaded', function(){
     deliverContent(editor.getValue());
   });
 });
-
