@@ -13,6 +13,8 @@ document.addEventListener('DOMContentLoaded', function(){
     traceur.options.experimental = true;
     try {
       var es5 = traceur.Compiler.script(content);
+      var str = "var st = document.createElement('script'); st.type = 'text/javascript'; st.src = '"+chrome.extension.getURL('traceur.js')+"'; (document.head||document.documentElement).appendChild(st);"
+      chrome.devtools.inspectedWindow.eval(str)
       chrome.devtools.inspectedWindow.eval(es5)
     }
     catch (e) {
