@@ -12,6 +12,6 @@
     "tabs"
   ],
   "web_accessible_resources": [
-    "traceur.js"
+    "node_modules/traceur/bin/traceur-runtime.js"
   ]
 }
