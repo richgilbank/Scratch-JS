@@ -6,7 +6,9 @@ document.addEventListener('DOMContentLoaded', function(){
     lineNumbers: true,
     matchBrackets: true,
     continueComments: "Enter",
-    extraKeys: {"Ctrl-Q": "toggleComment"}
+    extraKeys: {"Ctrl-Q": "toggleComment"},
+    tabSize: 2,
+    autoCloseBrackets: true
   });
 
   editor.setSize(window.innerWidth-20, window.innerHeight - 20);
