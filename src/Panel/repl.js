@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function(){
     autoCloseBrackets: true
   });
 
-  editor.setSize(window.innerWidth-20, window.innerHeight - 20);
   editor.setOption('theme', 'solarized dark');
 
   var deliverContent = function(content){

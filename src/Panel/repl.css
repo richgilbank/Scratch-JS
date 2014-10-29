@@ -1,6 +1,11 @@
 body {
   background: #002b36;
   font-size: 100%;
+  margin: 0;
+}
+
+.CodeMirror {
+  height: auto;
 }
 
 button {
@@ -9,7 +14,8 @@ button {
   border-radius: 10px;
   border: none;
   color: #fff;
-  position: absolute;
+  position: fixed;
+  z-index: 9000;
   bottom: 20px;
   right: 20px;
   font-size: 14px;
