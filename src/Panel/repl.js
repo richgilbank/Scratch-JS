@@ -25,8 +25,16 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
+  var combinationKey = 'metaKey';
+  chrome.runtime.sendMessage('platformInfo', function(info) {
+    if (info.os !== 'mac') {
+      combinationKey = 'ctrlKey';
+      document.getElementById('combinationKey').textContent = 'Ctrl';
+    }
+  });
+
   document.onkeydown = function(e){
-    if(e.metaKey && e.which == 13){
+    if(e[combinationKey] && e.which == 13){
       deliverContent(editor.getValue());
     }
   }

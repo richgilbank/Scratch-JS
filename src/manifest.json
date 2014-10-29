@@ -11,6 +11,9 @@
     "storage",
     "tabs"
   ],
+  "background": {
+    "scripts": ["background.js"]
+  },
   "web_accessible_resources": [
     "node_modules/traceur/bin/traceur-runtime.js"
   ]
