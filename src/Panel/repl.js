@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function(){
-  var str = "var st = document.createElement('script'); st.type = 'text/javascript'; st.src = '"+chrome.extension.getURL('node_modules/traceur/bin/traceur-runtime.js')+"'; (document.head||document.documentElement).appendChild(st);"
+  var str = "var st = document.createElement('script'); st.src = '"+chrome.extension.getURL('node_modules/traceur/bin/traceur-runtime.js')+"'; (document.head||document.documentElement).appendChild(st);"
   chrome.devtools.inspectedWindow.eval(str)
 
   var editor = CodeMirror.fromTextArea(document.querySelector("textarea"), {
