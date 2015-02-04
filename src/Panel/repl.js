@@ -17,10 +17,13 @@ document.addEventListener('DOMContentLoaded', function(){
     traceur.options.experimental = true;
     try {
       var es5 = traceur.Compiler.script(content);
-      chrome.devtools.inspectedWindow.eval(es5)
+      chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
+        if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
+          logError(exceptionInfo.value);
+      });
     }
     catch (e) {
-      chrome.devtools.inspectedWindow.eval("console.error(\"" + e + "\");");
+      logError(e);
     }
   }
 
@@ -42,3 +45,7 @@ document.addEventListener('DOMContentLoaded', function(){
     deliverContent(editor.getValue());
   });
 });
+
+function logError(err) {
+  chrome.devtools.inspectedWindow.eval("console.error(\"" + err + "\");");
+}
