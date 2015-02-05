@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', function(){
-  var str = "var st = document.createElement('script'); st.src = '"+chrome.extension.getURL('node_modules/traceur/bin/traceur-runtime.js')+"'; (document.head||document.documentElement).appendChild(st);"
-  chrome.devtools.inspectedWindow.eval(str)
+  // var str = "var st = document.createElement('script'); st.src = '"+chrome.extension.getURL('node_modules/traceur/bin/traceur-runtime.js')+"'; (document.head||document.documentElement).appendChild(st);"
+  // chrome.devtools.inspectedWindow.eval(str)
 
   var editor = CodeMirror.fromTextArea(document.querySelector("textarea"), {
     lineNumbers: true,
@@ -14,10 +14,11 @@ document.addEventListener('DOMContentLoaded', function(){
   editor.setOption('theme', 'solarized dark');
 
   var deliverContent = function(content){
-    traceur.options.experimental = true;
+    // traceur.options.experimental = true;
     try {
-      var es5 = traceur.Compiler.script(content);
-      chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
+      var es5 = to5.transform(content);
+      // var es5 = traceur.Compiler.script(content);
+      chrome.devtools.inspectedWindow.eval(es5.code, function(result, exceptionInfo) {
         if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
           logError(exceptionInfo.value);
       });
@@ -39,10 +40,21 @@ document.addEventListener('DOMContentLoaded', function(){
     if(e[combinationKey] && e.which == 13){
       deliverContent(editor.getValue());
     }
+    if(e[combinationKey] && e.which == 48) {
+      location.reload();
+    }
   }
 
-  document.querySelector('button').addEventListener('click', function(){
+  document.querySelector('.execute-script').addEventListener('click', function(){
     deliverContent(editor.getValue());
+  });
+
+  document.querySelector('.open-settings').addEventListener('click', function() {
+    document.querySelector('.settings-panel').classList.toggle('is-active');
+  });
+
+  document.querySelector('.close-settings').addEventListener('click', function() {
+    document.querySelector('.settings-panel').classList.remove('is-active');
   });
 });
 

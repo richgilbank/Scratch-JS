@@ -13,6 +13,7 @@
   },
   "homepage": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension",
   "dependencies": {
-    "traceur": "0.0.72"
+    "traceur": "0.0.72",
+    "6to5": "3.3.12"
   }
 }

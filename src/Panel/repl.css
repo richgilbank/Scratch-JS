@@ -8,22 +8,59 @@ body {
   height: auto;
 }
 
-button {
+.actions {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.execute-script {
   padding: 10px 15px;
   background: #3b89f3;
   border-radius: 10px;
   border: none;
   color: #fff;
-  position: fixed;
-  z-index: 9000;
-  bottom: 20px;
-  right: 20px;
   font-size: 14px;
+  cursor: pointer;
 }
-button:focus {
+.execute-script:focus {
   outline: none;
 }
-button:active {
+.execute-script:active {
   background: #1f72e3;
   padding: 11px 15px 9px 15px;
+}
+
+.open-settings {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.open-settings path {
+  fill: #586e75;
+}
+
+.settings-panel {
+  background: #fff;
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  left: 30%;
+  top: 30%;
+  opacity: 0;
+  pointer-events: none;
+  transform: scale(0.9) translateY(-20px);
+  transition: all 200ms ease;
+}
+
+.settings-panel.is-active {
+  pointer-events: auto;
+  opacity: 1;
+  transform: scale(1) translateY(0);
 }
