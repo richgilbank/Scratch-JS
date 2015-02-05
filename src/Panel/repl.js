@@ -103,6 +103,12 @@ Repl.prototype.addEventListeners = function() {
     document.querySelector('.settings-panel').classList.remove('is-active');
   });
 
+  [].forEach.call(document.querySelectorAll('input[name="transpiler"]'), function (el) {
+    el.addEventListener('click', function(e) {
+      _this.settings.set({ transpiler: e.target.value });
+    });
+  });
+
   document.onkeydown = function(e){
     if(e[combinationKey] && e.which == 13){
       _this.deliverContent(_this.editor.getValue());
