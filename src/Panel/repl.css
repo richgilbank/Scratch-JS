@@ -1,3 +1,23 @@
+@-webkit-keyframes spin {
+  from { transform: rotate(0deg);}
+  to { transform: rotate(360deg);}
+}
+
+.loading {
+  display: block;
+  width: 24px;
+  height: 24px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -12px;
+  margin-top: -12px;
+  border-radius: 50%;
+  border: 3px solid red;
+  border-top-color: transparent;
+  -webkit-animation: spin 1s infinite linear;
+}
+
 body {
   background: #002b36;
   font-size: 100%;
@@ -46,7 +66,17 @@ body {
   fill: #586e75;
 }
 
-.settings-panel {
+.settings {
+  perspective: 500px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+.settings__panel {
   background: #fff;
   position: absolute;
   width: 40%;
@@ -55,12 +85,36 @@ body {
   top: 30%;
   opacity: 0;
   pointer-events: none;
-  transform: scale(0.9) translateY(-20px);
+  -webkit-transform: scale(0.9) translateY(40px) rotateX(-20deg);
   transition: all 200ms ease;
 }
 
-.settings-panel.is-active {
+.settings.is-active .settings__panel {
   pointer-events: auto;
   opacity: 1;
-  transform: scale(1) translateY(0);
+  transform: scale(1) translateY(0) rotateX(0deg);
+}
+
+.settings__close-btn {
+  text-decoration: none;
+  color: #999;
+  display: block;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  font-size: 18px;
+  line-height: 17px;
+  padding: 5px 7px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.settings__close-btn:hover,
+.settings__close-btn:active {
+  background: #ccc;
+  color: #fff;
+}
+
+.settings__section {
+  padding: 0 1em;
 }

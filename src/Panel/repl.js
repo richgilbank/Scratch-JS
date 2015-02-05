@@ -7,6 +7,8 @@ function Settings() {
     transpiler: '6to5'
   }
 
+  document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
+
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
@@ -19,13 +21,49 @@ function Settings() {
   });
 }
 
+Settings.prototype.onDomReady = function() {
+  var _this = this;
+
+  document.querySelector('.open-settings').addEventListener('click', function() {
+    document.querySelector('.settings').classList.toggle('is-active');
+  });
+
+  document.querySelector('.settings__close-btn').addEventListener('click', function() {
+    document.querySelector('.settings').classList.remove('is-active');
+  });
+
+  [].forEach.call(document.querySelectorAll('input[name="transpiler"]'), function (el) {
+    el.addEventListener('click', function(e) {
+      _this.set({ transpiler: e.target.value });
+    });
+  });
+}
+
+Settings.prototype.loadingOn = function() {
+  console.log('loading');
+}
+
+Settings.prototype.loadingOff = function() {
+  console.log('not loading');
+}
+
 Settings.prototype.get = function(cb) {
-  chrome.storage.sync.get('settings', cb);
+  var _this = this;
+  this.loadingOn();
+  chrome.storage.sync.get('settings', function(data) {
+    _this.loadingOff();
+    cb(data);
+  });
 }
 
 Settings.prototype.set = function(settings, cb) {
-  cb = cb || function(){}
-  chrome.storage.sync.set({settings: settings}, cb);
+  var _this = this;
+  this.loadingOn();
+  chrome.storage.sync.set({settings: settings}, function() {
+    _this.loadingOff();
+    if(typeof cb === 'function')
+      cb();
+  });
 }
 
 
@@ -39,11 +77,12 @@ function Repl() {
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
-  this.addEventListeners.call(this);
   this.settings = new Settings();
 }
 
 Repl.prototype.onDomReady = function() {
+  this.addEventListeners.call(this);
+
   if(this.settings.data.transpiler in this.RUNTIME_PATHS) {
     var str = "var st = document.createElement('script'); st.src = '"+chrome.extension.getURL(this.RUNTIME_PATHS[this.settings.data.transpiler])+"'; (document.head||document.documentElement).appendChild(st);"
     chrome.devtools.inspectedWindow.eval(str)
@@ -93,20 +132,6 @@ Repl.prototype.addEventListeners = function() {
 
   document.querySelector('.execute-script').addEventListener('click', function(){
     _this.deliverContent(_this.editor.getValue());
-  });
-
-  document.querySelector('.open-settings').addEventListener('click', function() {
-    document.querySelector('.settings-panel').classList.toggle('is-active');
-  });
-
-  document.querySelector('.close-settings').addEventListener('click', function() {
-    document.querySelector('.settings-panel').classList.remove('is-active');
-  });
-
-  [].forEach.call(document.querySelectorAll('input[name="transpiler"]'), function (el) {
-    el.addEventListener('click', function(e) {
-      _this.settings.set({ transpiler: e.target.value });
-    });
   });
 
   document.onkeydown = function(e){

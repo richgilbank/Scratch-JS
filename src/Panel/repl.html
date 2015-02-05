@@ -22,19 +22,30 @@ http://kangax.github.io/compat-table/es6/#tr
   <button class="execute-script">Run it (<span id="combinationKey">&#8984;</span>&#8617;)</button>
 </div>
 
-<div class="settings-panel">
-  <a class="close-settings" href="#">&#10006;</a>
-  <h3>Settings</h3>
-  <hr />
-  <h4>6to5 or Tracuer?</h4>
-  <label>
-    <input type="radio" name="transpiler" value="6to5" checked>
-    6to5
-  </label>
-  <label>
-    <input type="radio" name="transpiler" value="traceur">
-    Traceur
-  </label>
+<div class="settings">
+  <div class="settings__panel">
+    <a class="settings__close-btn" href="#">&#10006;</a>
+    <div class="settings__section">
+      <h3>Settings</h3>
+    </div>
+    <hr />
+    <div class="settings__section">
+      <div class="loading"></div>
+      <h4>6to5 or Tracuer?</h4>
+      <div>
+        <label>
+          <input type="radio" name="transpiler" value="6to5" checked>
+          6to5
+        </label>
+      </div>
+      <div>
+        <label>
+          <input type="radio" name="transpiler" value="traceur">
+          Traceur
+        </label>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script type="text/javascript" src="../node_modules/traceur/bin/traceur.js"></script>
