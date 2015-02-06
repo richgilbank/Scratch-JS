@@ -1,28 +1,34 @@
 /*----------------------------------
   Settings and storage
  ---------------------------------*/
-function Settings() {
+function Settings(repl) {
   var _this = this;
-  var DEFAULTS = this.data = {
+  this.domReady = false;
+  this.repl = repl;
+  this.DEFAULTS = this.data = {
     transpiler: '6to5'
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
+}
+
+Settings.prototype.onDomReady = function() {
+  var _this = this;
+  this.domReady = true;
 
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
     if(typeof data === undefined || !data.hasOwnProperty('transpiler')) {
-      _this.set(DEFAULTS);
+      _this.set(_this.DEFAULTS, function() {
+        _this.setFormDefaults(_this.data);
+      });
     }
     else {
       _this.data = data;
+      _this.setFormDefaults(data);
     }
   });
-}
-
-Settings.prototype.onDomReady = function() {
-  var _this = this;
 
   document.querySelector('.open-settings').addEventListener('click', function() {
     document.querySelector('.settings').classList.toggle('is-active');
@@ -39,27 +45,41 @@ Settings.prototype.onDomReady = function() {
   });
 }
 
+Settings.prototype.setFormDefaults = function() {
+  document.querySelector('[name="transpiler"][value="' + this.data.transpiler + '"]').checked = true;
+}
+
 Settings.prototype.loadingOn = function() {
-  console.log('loading');
+  [].forEach.call(document.querySelectorAll('.loading'), function(el) {
+    if(this.domReady)
+      el.classList.add('is-active');
+  }.bind(this));
 }
 
 Settings.prototype.loadingOff = function() {
-  console.log('not loading');
+  [].forEach.call(document.querySelectorAll('.loading'), function(el) {
+    setTimeout(function(){el.classList.remove('is-active') }, 500);
+  }.bind(this));
 }
 
 Settings.prototype.get = function(cb) {
   var _this = this;
   this.loadingOn();
-  chrome.storage.sync.get('settings', function(data) {
+  // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
+  // chrome.storage.sync.get('settings', function(data) {
+  chrome.runtime.sendMessage({name: 'getSettings'}, function(data) {
     _this.loadingOff();
-    cb(data);
+    cb(data || {});
   });
 }
 
 Settings.prototype.set = function(settings, cb) {
   var _this = this;
   this.loadingOn();
-  chrome.storage.sync.set({settings: settings}, function() {
+  // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
+  // chrome.storage.sync.set({settings: settings}, function() {
+  chrome.runtime.sendMessage({name: 'setSettings', value: settings}, function(data) {
+    _this.data = settings;
     _this.loadingOff();
     if(typeof cb === 'function')
       cb();
@@ -76,17 +96,26 @@ function Repl() {
     'traceur': 'node_modules/traceur/bin/traceur-runtime.js'
   }
 
+  this.settings = new Settings(this);
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
-  this.settings = new Settings();
+}
+
+Repl.prototype.insertRuntime = function() {
+  var transpiler = this.settings.data.transpiler;
+  if(transpiler in this.RUNTIME_PATHS) {
+    var str =
+      "if(!document.querySelector('#"+transpiler+"')) {" +
+        "var st = document.createElement('script');" +
+        "st.id='"+ transpiler +"';" +
+        "st.src = '"+chrome.extension.getURL(this.RUNTIME_PATHS[transpiler])+"';" +
+        "(document.head||document.documentElement).appendChild(st);" +
+      "}";
+    chrome.devtools.inspectedWindow.eval(str)
+  }
 }
 
 Repl.prototype.onDomReady = function() {
   this.addEventListeners.call(this);
-
-  if(this.settings.data.transpiler in this.RUNTIME_PATHS) {
-    var str = "var st = document.createElement('script'); st.src = '"+chrome.extension.getURL(this.RUNTIME_PATHS[this.settings.data.transpiler])+"'; (document.head||document.documentElement).appendChild(st);"
-    chrome.devtools.inspectedWindow.eval(str)
-  }
 
   this.editor = CodeMirror.fromTextArea(document.querySelector("textarea"), {
     lineNumbers: true,
@@ -98,7 +127,7 @@ Repl.prototype.onDomReady = function() {
     theme: 'solarized dark'
   });
 
-  chrome.runtime.sendMessage('platformInfo', function(info) {
+  chrome.runtime.sendMessage({name: 'platformInfo'}, function(info) {
     if (info.os !== 'mac') {
       combinationKey = 'ctrlKey';
       document.getElementById('combinationKey').textContent = 'Ctrl';
@@ -107,6 +136,8 @@ Repl.prototype.onDomReady = function() {
 }
 
 Repl.prototype.deliverContent = function(content){
+  this.insertRuntime();
+
   if(this.settings.data.transpiler === 'traceur')
     traceur.options.experimental = true;
 
@@ -114,7 +145,7 @@ Repl.prototype.deliverContent = function(content){
     if(this.settings.data.transpiler === 'traceur') {
       var es5 = traceur.Compiler.script(content);
     }
-    else if(this.settings.data.transpiler === '6to5') {
+    if(this.settings.data.transpiler === '6to5') {
       var es5 = to5.transform(content).code;
     }
     chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {

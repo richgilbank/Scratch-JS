@@ -3,25 +3,32 @@
   to { transform: rotate(360deg);}
 }
 
-.loading {
-  display: block;
-  width: 24px;
-  height: 24px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  margin-left: -12px;
-  margin-top: -12px;
-  border-radius: 50%;
-  border: 3px solid red;
-  border-top-color: transparent;
-  -webkit-animation: spin 1s infinite linear;
-}
-
 body {
   background: #002b36;
   font-size: 100%;
   margin: 0;
+}
+
+hr {
+  border: none;
+  background: #ccc;
+  height: 1px;
+}
+
+.loading {
+  opacity: 0;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #3b89f3;
+  border-top-color: transparent;
+  -webkit-animation: spin 1s infinite linear;
+  -webkit-transition: all 500ms ease;
+}
+
+.loading.is-active {
+  opacity: 1;
 }
 
 .CodeMirror {
@@ -74,6 +81,7 @@ body {
   top: 0;
   left: 0;
   pointer-events: none;
+  z-index: 100;
 }
 
 .settings__panel {
@@ -89,6 +97,22 @@ body {
   transition: all 200ms ease;
 }
 
+@media (max-width: 500px) {
+  .settings__panel {
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+  }
+}
+
+@media (max-height: 400px) {
+  .settings__panel {
+    height: 100%;
+    top: 0;
+  }
+}
+
 .settings.is-active .settings__panel {
   pointer-events: auto;
   opacity: 1;
@@ -100,8 +124,8 @@ body {
   color: #999;
   display: block;
   position: absolute;
-  right: 5px;
-  top: 5px;
+  right: 15px;
+  top: 17px;
   font-size: 18px;
   line-height: 17px;
   padding: 5px 7px;
@@ -117,4 +141,10 @@ body {
 
 .settings__section {
   padding: 0 1em;
+}
+
+.settings__spinner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
