@@ -1,29 +1,150 @@
+@-webkit-keyframes spin {
+  from { transform: rotate(0deg);}
+  to { transform: rotate(360deg);}
+}
+
 body {
   background: #002b36;
   font-size: 100%;
   margin: 0;
 }
 
+hr {
+  border: none;
+  background: #ccc;
+  height: 1px;
+}
+
+.loading {
+  opacity: 0;
+  display: block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 3px solid #3b89f3;
+  border-top-color: transparent;
+  -webkit-animation: spin 1s infinite linear;
+  -webkit-transition: all 500ms ease;
+}
+
+.loading.is-active {
+  opacity: 1;
+}
+
 .CodeMirror {
   height: auto;
 }
 
-button {
+.actions {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 100;
+}
+
+.execute-script {
   padding: 10px 15px;
   background: #3b89f3;
   border-radius: 10px;
   border: none;
   color: #fff;
-  position: fixed;
-  z-index: 9000;
-  bottom: 20px;
-  right: 20px;
   font-size: 14px;
+  cursor: pointer;
 }
-button:focus {
+.execute-script:focus {
   outline: none;
 }
-button:active {
+.execute-script:active {
   background: #1f72e3;
   padding: 11px 15px 9px 15px;
+}
+
+.open-settings {
+  width: 20px;
+  height: 20px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.open-settings path {
+  fill: #586e75;
+}
+
+.settings {
+  perspective: 500px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  z-index: 100;
+}
+
+.settings__panel {
+  background: #fff;
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  left: 30%;
+  top: 30%;
+  opacity: 0;
+  pointer-events: none;
+  -webkit-transform: scale(0.9) translateY(40px) rotateX(-20deg);
+  transition: all 200ms ease;
+}
+
+@media (max-width: 500px) {
+  .settings__panel {
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+  }
+}
+
+@media (max-height: 400px) {
+  .settings__panel {
+    height: 100%;
+    top: 0;
+  }
+}
+
+.settings.is-active .settings__panel {
+  pointer-events: auto;
+  opacity: 1;
+  transform: scale(1) translateY(0) rotateX(0deg);
+}
+
+.settings__close-btn {
+  text-decoration: none;
+  color: #999;
+  display: block;
+  position: absolute;
+  right: 15px;
+  top: 17px;
+  font-size: 18px;
+  line-height: 17px;
+  padding: 5px 7px;
+  border-radius: 50%;
+  text-align: center;
+}
+
+.settings__close-btn:hover,
+.settings__close-btn:active {
+  background: #ccc;
+  color: #fff;
+}
+
+.settings__section {
+  padding: 0 1em;
+}
+
+.settings__spinner {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
 }
