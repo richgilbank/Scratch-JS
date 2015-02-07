@@ -102,7 +102,7 @@ function Repl() {
 
 Repl.prototype.insertRuntime = function() {
   var transpiler = this.settings.data.transpiler;
-  if(transpiler in this.RUNTIME_PATHS) {
+  if(this.RUNTIME_PATHS[transpiler]) {
     var str =
       "if(!document.querySelector('#"+transpiler+"')) {" +
         "var st = document.createElement('script');" +
