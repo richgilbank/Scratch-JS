@@ -28,6 +28,8 @@ Settings.prototype.onDomReady = function() {
       _this.data = data;
       _this.setFormDefaults(data);
     }
+
+    _this.repl.insertRuntime();
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {
@@ -93,7 +95,8 @@ Settings.prototype.set = function(settings, cb) {
 var combinationKey = 'metaKey';
 function Repl() {
   this.RUNTIME_PATHS = {
-    'traceur': 'node_modules/traceur/bin/traceur-runtime.js'
+    'traceur': 'node_modules/traceur/bin/traceur-runtime.js',
+    '6to5': 'node_modules/6to5/browser-polyfill.js'
   }
 
   this.settings = new Settings(this);
@@ -136,8 +139,6 @@ Repl.prototype.onDomReady = function() {
 }
 
 Repl.prototype.deliverContent = function(content){
-  this.insertRuntime();
-
   if(this.settings.data.transpiler === 'traceur')
     traceur.options.experimental = true;
 
