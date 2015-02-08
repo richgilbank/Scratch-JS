@@ -174,9 +174,6 @@ Repl.prototype.addEventListeners = function() {
     if(e[combinationKey] && e.which == 13){
       _this.deliverContent(_this.editor.getValue());
     }
-    if(e[combinationKey] && e.which == 48) {
-      location.reload();
-    }
   }
 }
 
