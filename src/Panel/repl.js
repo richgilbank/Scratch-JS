@@ -6,7 +6,7 @@ function Settings(repl) {
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
-    transpiler: '6to5'
+    transpiler: 'to5'
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
@@ -81,7 +81,11 @@ Settings.prototype.set = function(settings, cb) {
   // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
   // chrome.storage.sync.set({settings: settings}, function() {
   chrome.runtime.sendMessage({name: 'setSettings', value: settings}, function(data) {
+    var tempSettings = _this.data;
     _this.data = settings;
+    if(tempSettings.transpiler !== settings.transpiler) {
+     _this.repl.insertRuntime();
+    }
     _this.loadingOff();
     if(typeof cb === 'function')
       cb();
@@ -96,7 +100,7 @@ var combinationKey = 'metaKey';
 function Repl() {
   this.RUNTIME_PATHS = {
     'traceur': 'node_modules/traceur/bin/traceur-runtime.js',
-    '6to5': 'node_modules/6to5/browser-polyfill.js'
+    'to5': 'node_modules/6to5/browser-polyfill.js'
   }
 
   this.settings = new Settings(this);
@@ -146,7 +150,7 @@ Repl.prototype.deliverContent = function(content){
     if(this.settings.data.transpiler === 'traceur') {
       var es5 = traceur.Compiler.script(content);
     }
-    if(this.settings.data.transpiler === '6to5') {
+    if(this.settings.data.transpiler === 'to5') {
       var es5 = to5.transform(content).code;
     }
     chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
