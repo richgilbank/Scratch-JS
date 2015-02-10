@@ -45,18 +45,23 @@ hr {
 .execute-script {
   padding: 10px 15px;
   background: #3b89f3;
-  border-radius: 10px;
+  border-radius: 5px;
   border: none;
   color: #fff;
   font-size: 14px;
   cursor: pointer;
+  -webkit-transition: all 50ms ease;
 }
 .execute-script:focus {
   outline: none;
 }
+.execute-script:hover {
+  background: #337fe6;
+}
 .execute-script:active {
   background: #1f72e3;
-  padding: 11px 15px 9px 15px;
+  transform: translateY(-1px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 .open-settings {
@@ -88,9 +93,9 @@ hr {
   background: #fff;
   position: absolute;
   width: 40%;
-  height: 40%;
+  height: 60%;
   left: 30%;
-  top: 30%;
+  top: 20%;
   opacity: 0;
   box-shadow: 0 5px 20px rgba(200, 200, 200, 0.8);
   border: 1px solid #ddd;
@@ -108,7 +113,7 @@ hr {
   }
 }
 
-@media (max-height: 400px) {
+@media (max-height: 450px) {
   .settings__panel {
     height: 100%;
     top: 0;
