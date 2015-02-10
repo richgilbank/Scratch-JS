@@ -1,6 +1,6 @@
 {
   "name": "es6-repl-chrome-extension",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "This extension is an add-on for dev tools which integrates the Google Traceur transpiler (https://github.com/google/traceur-compiler), allowing you to test out the new JS features coming with ECMAScript 6.",
   "repository": {
     "type": "git",
