@@ -6,7 +6,8 @@ function Settings(repl) {
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
-    transpiler: 'to5'
+    transpiler: 'to5',
+    theme: 'solarized dark'
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
@@ -45,10 +46,18 @@ Settings.prototype.onDomReady = function() {
       _this.set({ transpiler: e.target.value });
     });
   });
+
+  [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
+    el.addEventListener('click', function(e) {
+      _this.set({ theme: e.target.value });
+      _this.repl.editor.setOption('theme', e.target.value);
+    });
+  });
 }
 
 Settings.prototype.setFormDefaults = function() {
   document.querySelector('[name="transpiler"][value="' + this.data.transpiler + '"]').checked = true;
+  document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
 }
 
 Settings.prototype.loadingOn = function() {
@@ -78,12 +87,15 @@ Settings.prototype.get = function(cb) {
 Settings.prototype.set = function(settings, cb) {
   var _this = this;
   this.loadingOn();
+  var updatedSettings = this.data;
+  for(i in settings) {
+    updatedSettings[i] = settings[i];
+  }
   // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
   // chrome.storage.sync.set({settings: settings}, function() {
-  chrome.runtime.sendMessage({name: 'setSettings', value: settings}, function(data) {
-    var tempSettings = _this.data;
-    _this.data = settings;
-    if(tempSettings.transpiler !== settings.transpiler) {
+  chrome.runtime.sendMessage({name: 'setSettings', value: updatedSettings}, function(data) {
+    _this.data = updatedSettings;
+    if(settings['transpiler']) {
      _this.repl.insertRuntime();
     }
     _this.loadingOff();
@@ -171,8 +183,11 @@ Repl.prototype.addEventListeners = function() {
   });
 
   document.onkeydown = function(e){
-    if(e[combinationKey] && e.which == 13){
+    if(e[combinationKey] && e.which == 13) {
       _this.deliverContent(_this.editor.getValue());
+    }
+    if(e[combinationKey] && e.which == 48) {
+      location.reload();
     }
   }
 }

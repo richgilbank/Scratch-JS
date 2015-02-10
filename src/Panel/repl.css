@@ -92,6 +92,8 @@ hr {
   left: 30%;
   top: 30%;
   opacity: 0;
+  box-shadow: 0 5px 20px rgba(200, 200, 200, 0.8);
+  border: 1px solid #ddd;
   pointer-events: none;
   -webkit-transform: scale(0.9) translateY(40px) rotateX(-20deg);
   transition: all 200ms ease;
