@@ -28,6 +28,9 @@ Settings.prototype.onDomReady = function() {
     else {
       _this.data = data;
       _this.setFormDefaults(data);
+      for(key in data) {
+        _this.repl.bus.trigger('settings:changed:' + key, data[key]);
+      }
     }
 
     _this.repl.insertRuntime();
@@ -50,7 +53,6 @@ Settings.prototype.onDomReady = function() {
   [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
     el.addEventListener('click', function(e) {
       _this.set({ theme: e.target.value });
-      _this.repl.editor.setOption('theme', e.target.value);
     });
   });
 }
@@ -95,13 +97,33 @@ Settings.prototype.set = function(settings, cb) {
   // chrome.storage.sync.set({settings: settings}, function() {
   chrome.runtime.sendMessage({name: 'setSettings', value: updatedSettings}, function(data) {
     _this.data = updatedSettings;
-    if(settings['transpiler']) {
-     _this.repl.insertRuntime();
-    }
     _this.loadingOff();
     if(typeof cb === 'function')
       cb();
+
+    for(key in settings) {
+      _this.repl.bus.trigger('settings:changed:' + key, settings[key]);
+    }
   });
+}
+
+
+/*----------------------------------
+  Events
+ ---------------------------------*/
+var Events = function() {};
+Events.prototype = {
+  _events: {},
+  on: function(event, callback) {
+    this._events[event] = this._events[event] || [];
+    this._events[event].push(callback);
+  },
+  trigger: function(event) {
+    if(!this._events.hasOwnProperty(event)) return;
+    for(handler of this._events[event]) {
+      handler.apply(this, Array.prototype.slice.call(arguments, 1));
+    }
+  }
 }
 
 
@@ -115,6 +137,7 @@ function Repl() {
     'to5': 'node_modules/6to5/browser-polyfill.js'
   }
 
+  this.bus = new Events();
   this.settings = new Settings(this);
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
 }
@@ -134,6 +157,7 @@ Repl.prototype.insertRuntime = function() {
 }
 
 Repl.prototype.onDomReady = function() {
+  var _this = this;
   this.addEventListeners.call(this);
 
   this.editor = CodeMirror.fromTextArea(document.querySelector("textarea"), {
@@ -143,7 +167,7 @@ Repl.prototype.onDomReady = function() {
     extraKeys: {"Ctrl-Q": "toggleComment"},
     tabSize: 2,
     autoCloseBrackets: true,
-    theme: 'solarized dark'
+    theme: this.settings.data.theme
   });
 
   chrome.runtime.sendMessage({name: 'platformInfo'}, function(info) {
@@ -190,6 +214,14 @@ Repl.prototype.addEventListeners = function() {
       location.reload();
     }
   }
+
+  this.bus.on('settings:changed:theme', function(theme) {
+    _this.editor.setOption('theme', theme)
+  });
+
+  this.bus.on('settings:changed:transpiler', function(transpiler) {
+    _this.insertRuntime();
+  });
 }
 
 // Instantiate the object
