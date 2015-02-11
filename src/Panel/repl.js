@@ -139,6 +139,12 @@ function Repl() {
 
   this.bus = new Events();
   this.settings = new Settings(this);
+
+  this.DOM = {
+    output: document.querySelector('.output'),
+    input: document.querySelector('.input')
+  }
+
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
 }
 
@@ -160,7 +166,7 @@ Repl.prototype.onDomReady = function() {
   var _this = this;
   this.addEventListeners.call(this);
 
-  this.editor = CodeMirror.fromTextArea(document.querySelector("textarea"), {
+  this.editor = CodeMirror.fromTextArea(document.getElementById("input"), {
     lineNumbers: true,
     matchBrackets: true,
     continueComments: "Enter",
@@ -189,6 +195,9 @@ Repl.prototype.deliverContent = function(content){
     if(this.settings.data.transpiler === 'to5') {
       var es5 = to5.transform(content).code;
     }
+
+    this.output.setValue(es5);
+
     chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
       if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
         logError(exceptionInfo.value);
@@ -199,12 +208,31 @@ Repl.prototype.deliverContent = function(content){
   }
 }
 
+Repl.prototype.toggleOutput = function() {
+  this.output = this.output || CodeMirror.fromTextArea(document.getElementById("output"), {
+    lineNumbers: true,
+    tabSize: 2,
+    readOnly: true,
+    theme: 'solarized light'
+  });
+
+  this.DOM.output.classList.toggle('is-hidden');
+  this.DOM.input.classList.toggle('is-reduced');
+
+  if (!this.DOM.output.classList.contains('is-hidden')) {
+    this.deliverContent(this.editor.getValue());
+  }
+
+};
+
 Repl.prototype.addEventListeners = function() {
   var _this = this;
 
   document.querySelector('.execute-script').addEventListener('click', function(){
     _this.deliverContent(_this.editor.getValue());
   });
+
+  document.getElementById('toggleOutput').addEventListener('click', this.toggleOutput.bind(this));
 
   document.onkeydown = function(e){
     if(e[combinationKey] && e.which == 13) {

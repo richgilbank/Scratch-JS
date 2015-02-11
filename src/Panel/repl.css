@@ -155,3 +155,35 @@ hr {
   bottom: 10px;
   right: 10px;
 }
+
+.output {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 30%;
+  height: 100%;
+  resize: both;
+  overflow: auto;
+}
+
+.output.is-hidden {
+  display: none;
+}
+
+.input.is-reduced {
+  width: 70%;
+}
+
+.toggle-output {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 100;
+  margin-right: 10px;
+  margin-top: 10px;
+}
+
+.output .CodeMirror {
+  box-shadow: none;
+  -webkit-box-shadow: none;
+}
