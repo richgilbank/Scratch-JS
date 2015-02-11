@@ -196,7 +196,8 @@ Repl.prototype.deliverContent = function(content){
       var es5 = to5.transform(content).code;
     }
 
-    this.output.setValue(es5);
+    if (this.output)
+      this.output.setValue(es5);
 
     chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
       if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
