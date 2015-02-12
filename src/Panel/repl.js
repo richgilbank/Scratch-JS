@@ -209,7 +209,7 @@ Repl.prototype.deliverContent = function(content){
   }
 }
 
-Repl.prototype.toggleOutput = function() {
+Repl.prototype.toggleOutput = function(e) {
   this.output = this.output || CodeMirror.fromTextArea(document.getElementById("output"), {
     lineNumbers: true,
     tabSize: 2,
@@ -219,6 +219,8 @@ Repl.prototype.toggleOutput = function() {
 
   this.DOM.output.classList.toggle('is-hidden');
   this.DOM.input.classList.toggle('is-reduced');
+
+  e.target.classList.toggle('is-open');
 
   if (!this.DOM.output.classList.contains('is-hidden')) {
     this.deliverContent(this.editor.getValue());
@@ -233,7 +235,9 @@ Repl.prototype.addEventListeners = function() {
     _this.deliverContent(_this.editor.getValue());
   });
 
-  document.getElementById('toggleOutput').addEventListener('click', this.toggleOutput.bind(this));
+  document.getElementById('toggleOutput').addEventListener('click', function(e){
+    _this.toggleOutput(e);
+  });
 
   document.onkeydown = function(e){
     if(e[combinationKey] && e.which == 13) {
