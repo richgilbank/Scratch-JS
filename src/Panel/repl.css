@@ -166,6 +166,16 @@ hr {
   overflow: auto;
 }
 
+.output .CodeMirror.cm-s-solarized.cm-s-dark,
+.output .CodeMirror.cm-s-solarized.cm-s-dark .CodeMirror-gutters {
+  background-color: #001E25;
+}
+
+.output .CodeMirror.cm-s-default,
+.output .CodeMirror.cm-s-default .CodeMirror-gutters {
+  background-color: #F7F7F7;
+}
+
 .output.is-hidden {
   display: none;
 }

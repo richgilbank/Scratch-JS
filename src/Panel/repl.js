@@ -214,7 +214,7 @@ Repl.prototype.toggleOutput = function() {
     lineNumbers: true,
     tabSize: 2,
     readOnly: true,
-    theme: 'solarized light'
+    theme: this.settings.data.theme
   });
 
   this.DOM.output.classList.toggle('is-hidden');
@@ -245,7 +245,8 @@ Repl.prototype.addEventListeners = function() {
   }
 
   this.bus.on('settings:changed:theme', function(theme) {
-    _this.editor.setOption('theme', theme)
+    _this.editor.setOption('theme', theme);
+    _this.output.setOption('theme', theme);
   });
 
   this.bus.on('settings:changed:transpiler', function(transpiler) {
