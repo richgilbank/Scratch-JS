@@ -1,3 +1,14 @@
+function debounce(fn, delay) {
+  var timer = null;
+  return function () {
+    var context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      fn.apply(context, args);
+    }, delay);
+  };
+}
+
 /*----------------------------------
   Settings and storage
  ---------------------------------*/
@@ -166,6 +177,8 @@ Repl.prototype.onDomReady = function() {
   var _this = this;
   this.addEventListeners.call(this);
 
+  this.width = window.innerWidth;
+
   this.editor = CodeMirror.fromTextArea(document.getElementById("input"), {
     lineNumbers: true,
     matchBrackets: true,
@@ -228,6 +241,19 @@ Repl.prototype.toggleOutput = function(e) {
 
 };
 
+Repl.prototype.onReizeMousedown = function() {
+  var resizeOutput = this.resizeOutput.bind(this);
+  document.addEventListener('mousemove', resizeOutput);
+  document.addEventListener('mouseup', function(){
+    document.removeEventListener('mousemove', resizeOutput);
+  });
+};
+
+Repl.prototype.resizeOutput = function(e) {
+  var percentWidth = e.x / this.width * 100;
+  this.DOM.output.style.width = 100 - percentWidth + "%";
+};
+
 Repl.prototype.addEventListeners = function() {
   var _this = this;
 
@@ -247,6 +273,8 @@ Repl.prototype.addEventListeners = function() {
       location.reload();
     }
   }
+
+  document.getElementById('resize').addEventListener('mousedown', debounce(this.onReizeMousedown.bind(this)), 200);
 
   this.bus.on('settings:changed:theme', function(theme) {
     _this.editor.setOption('theme', theme);

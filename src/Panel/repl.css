@@ -97,7 +97,7 @@ hr {
   position: fixed;
   bottom: 20px;
   right: 20px;
-  z-index: 100;
+  z-index: 102;
 }
 
 .open-settings {
@@ -122,7 +122,7 @@ hr {
   top: 0;
   left: 0;
   pointer-events: none;
-  z-index: 100;
+  z-index: 103;
 }
 
 .settings__panel {
@@ -200,6 +200,7 @@ hr {
   height: 100%;
   resize: both;
   overflow: auto;
+  z-index: 101;
 }
 
 .output .CodeMirror.cm-s-solarized.cm-s-dark,
@@ -213,7 +214,7 @@ hr {
 }
 
 .output.is-hidden {
-  width: 0;
+  display: none;
 }
 
 .input.is-reduced {
@@ -231,4 +232,16 @@ hr {
 .output .CodeMirror {
   box-shadow: none;
   -webkit-box-shadow: none;
+}
+
+.resize {
+  height: 100%;
+  width: 5px;
+  border-left: 1px solid #A3A3A3;
+  background: transparent;
+  cursor: col-resize;
+  position: absolute;
+  left: 0;
+  top: 0;
+  z-index: 101;
 }
