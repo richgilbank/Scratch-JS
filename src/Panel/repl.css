@@ -20,8 +20,6 @@ hr {
 }
 
 .btn {
-  -webkit-appearance: none;
-  -webkit-user-select: none;
   border-radius: 2px;
   font-weight: bold;
   font-family: Roboto, arial, sans-serif;
