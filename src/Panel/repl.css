@@ -9,6 +9,10 @@ body {
   margin: 0;
 }
 
+textarea {
+  opacity: 0;
+}
+
 hr {
   border: none;
   background: #ccc;
