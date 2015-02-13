@@ -233,6 +233,7 @@ Repl.prototype.toggleOutput = function(e) {
 
   this.DOM.output.classList.toggle('is-hidden');
   this.DOM.input.classList.toggle('is-reduced');
+  this.DOM.input.style.width = "100%";
 
   e.target.classList.toggle('is-open');
 
