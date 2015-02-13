@@ -9,6 +9,10 @@ body {
   margin: 0;
 }
 
+.is-resizing {
+  -webkit-user-select: none;
+}
+
 textarea {
   opacity: 0;
 }

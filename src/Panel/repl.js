@@ -243,9 +243,11 @@ Repl.prototype.toggleOutput = function(e) {
 
 Repl.prototype.onReizeMousedown = function() {
   var resizeOutput = this.resizeOutput.bind(this);
+  document.body.classList.add('is-resizing');
   document.addEventListener('mousemove', resizeOutput);
   document.addEventListener('mouseup', function(){
     document.removeEventListener('mousemove', resizeOutput);
+    document.body.classList.remove('is-resizing');
   });
 };
 
