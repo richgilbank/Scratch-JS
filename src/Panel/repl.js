@@ -152,6 +152,7 @@ function Repl() {
   this.settings = new Settings(this);
 
   this.DOM = {
+    body: document.body,
     output: document.querySelector('.output'),
     input: document.querySelector('.input')
   }
@@ -241,14 +242,18 @@ Repl.prototype.toggleOutput = function(e) {
 
 };
 
+Repl.prototype.onWindowResize = function() {
+  this.width = window.innerWidth;
+};
+
 Repl.prototype.onReizeMousedown = function() {
   var resizeOutput = this.resizeOutput.bind(this);
-  document.body.classList.add('is-resizing');
+  this.DOM.body.classList.add('is-resizing');
   document.addEventListener('mousemove', resizeOutput);
   document.addEventListener('mouseup', function(){
     document.removeEventListener('mousemove', resizeOutput);
-    document.body.classList.remove('is-resizing');
-  });
+    this.DOM.body.classList.remove('is-resizing');
+  }.bind(this));
 };
 
 Repl.prototype.resizeOutput = function(e) {
@@ -275,7 +280,9 @@ Repl.prototype.addEventListeners = function() {
     if(e[combinationKey] && e.which == 48) {
       location.reload();
     }
-  }
+  };
+
+  window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
 
   document.getElementById('resize').addEventListener('mousedown', debounce(this.onReizeMousedown.bind(this)), 200);
 
