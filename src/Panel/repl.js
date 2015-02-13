@@ -253,6 +253,7 @@ Repl.prototype.onReizeMousedown = function() {
 
 Repl.prototype.resizeOutput = function(e) {
   var percentWidth = e.x / this.width * 100;
+  this.DOM.input.style.width = percentWidth + "%";
   this.DOM.output.style.width = 100 - percentWidth + "%";
 };
 
