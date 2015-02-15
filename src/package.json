@@ -12,11 +12,12 @@
     "url": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension/issues"
   },
   "homepage": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension",
-  "dependencies": {
-    "traceur": "0.0.72",
-    "6to5": "3.3.12"
-  },
   "devDependencies": {
-    "tiny-lr": "^0.1.5"
+    "6to5": "3.3.12",
+    "del": "^1.1.1",
+    "gulp-usemin": "^0.3.11",
+    "gulp-zip": "^2.0.2",
+    "tiny-lr": "^0.1.5",
+    "traceur": "0.0.72"
   }
 }
