@@ -8,13 +8,13 @@ var FILES = {
   copy: [
     '**/*',
     '!{panel,panel/**}',
-    '!{node_modules,node_modules/**}',
     '!package.json',
     '!gulpfile.js'
   ],
   watch: ['panel/*.{js,css,html}'],
   panel: 'panel/repl.html',
   dist: '../dist/',
+  distPanel: '../dist/panel/',
   distAll: '../dist/**',
   zip: 'ES6 Repl.zip',
   root: '../'
@@ -32,7 +32,7 @@ gulp.task('dev', function () {
   });
 });
 
-gulp.task('copy', function() {
+gulp.task('copy', ['clean'], function() {
   return gulp.src(FILES.copy)
     .pipe(gulp.dest(FILES.dist));
 });
@@ -40,7 +40,7 @@ gulp.task('copy', function() {
 gulp.task('usemin', ['clean'], function() {
   return gulp.src(FILES.panel)
     .pipe(usemin())
-    .pipe(gulp.dest(FILES.dist));
+    .pipe(gulp.dest(FILES.distPanel));
 });
 
 gulp.task('clean', function(cb) {
