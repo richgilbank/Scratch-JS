@@ -15,5 +15,8 @@
   "dependencies": {
     "traceur": "0.0.72",
     "6to5": "3.3.12"
+  },
+  "devDependencies": {
+    "tiny-lr": "^0.1.5"
   }
 }
