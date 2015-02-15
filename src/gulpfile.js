@@ -52,3 +52,6 @@ gulp.task('zip', ['usemin', 'copy'], function() {
     .pipe(zip(FILES.zip))
     .pipe(gulp.dest(FILES.root));
 });
+
+gulp.task('default', ['dev']);
+gulp.task('build', ['zip']);
