@@ -289,7 +289,7 @@ Repl.prototype.addEventListeners = function() {
 
   this.bus.on('settings:changed:theme', function(theme) {
     _this.editor.setOption('theme', theme);
-    _this.output.setOption('theme', theme);
+    if(_this.output) _this.output.setOption('theme', theme);
   });
 
   this.bus.on('settings:changed:transpiler', function(transpiler) {
