@@ -1,17 +1,18 @@
 function Transformer() {
   bus.on('transformers:register', this.registerSelf, this);
-  bus.on('settings:changed:transformer', this.insertRuntime, this);
+  bus.on('settings:changed:transformer', this.onTransformerChange, this);
 }
 
 // Attributes to override on the subclass
 Transformer.prototype = {
   // Required
+  name: false,
   handle: false,
   runtimePath: false,
   transform: function(input) { return ''; },
 
   // Optional
-  beforeTransform: function() {}
+  beforeTransform: function() {},
 
   // Internal
   _active: false

@@ -33,6 +33,7 @@ Settings.prototype.onDomReady = function() {
       }
     }
 
+    document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
     bus.trigger('settings:changed:transformer', _this.data.transformer.handle);
   });
 
@@ -44,10 +45,9 @@ Settings.prototype.onDomReady = function() {
     document.querySelector('.settings').classList.remove('is-active');
   });
 
-  [].forEach.call(document.querySelectorAll('input[name="transformer"]'), function (el) {
-    el.addEventListener('click', function(e) {
+  document.querySelector('.transformer-options').addEventListener('click', function(e) {
+    if(e.target.name === 'transformer')
       _this.set({ transformer: e.target.value });
-    });
   });
 
   [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
@@ -57,8 +57,22 @@ Settings.prototype.onDomReady = function() {
   });
 }
 
+Settings.prototype.transformerOptionTemplate = function(transformers) {
+  var template = '';
+  for(var i in transformers) {
+    var t = transformers[i];
+    template +=
+      '<div>' +
+        '<label>' +
+          '<input type="radio" name="transformer" value="' + t.handle + '"' + (t._active ? ' checked' : '') + '>' +
+          t.name +
+        '</label>' +
+      '</div>'
+  }
+  return template;
+}
+
 Settings.prototype.setFormDefaults = function() {
-  document.querySelector('[name="transformer"][value="' + this.data.transformer + '"]').checked = true;
   document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
 }
 
