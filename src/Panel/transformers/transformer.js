@@ -32,7 +32,11 @@ Transformer.prototype.insertRuntime = function() {
 
 Transformer.prototype.onTransformerChange = function(newTransformer) {
   if(this._active && newTransformer !== this.handle) {
-    // TODO: Remove runtime
+    var str =
+      'var el = document.querySelector("#' + this.handle + '");' +
+      'if(el !== null) { el.remove(); }';
+    chrome.devtools.inspectedWindow.eval(str);
+    this._active = false;
   } else if(newTransformer === this.handle) {
     this.insertRuntime();
     this._active = true;
