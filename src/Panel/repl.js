@@ -15,8 +15,8 @@ function Repl() {
 
   this.DOM = {
     body: document.body,
-    output: document.querySelector('.output'),
-    input: document.querySelector('.input')
+    output: $('.output')[0],
+    input: $('.input')[0]
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
@@ -27,7 +27,7 @@ Repl.prototype.onDomReady = function() {
 
   this.width = window.innerWidth;
 
-  this.editor = CodeMirror.fromTextArea(document.getElementById("input"), {
+  this.editor = CodeMirror.fromTextArea($('#input')[0], {
     lineNumbers: true,
     matchBrackets: true,
     continueComments: "Enter",
@@ -40,21 +40,17 @@ Repl.prototype.onDomReady = function() {
   chrome.runtime.sendMessage({name: 'platformInfo'}, function(info) {
     if (info.os !== 'mac') {
       combinationKey = 'ctrlKey';
-      document.getElementById('combinationKey').textContent = 'Ctrl';
+      $('#combinationKey')[0].textContent = 'Ctrl';
     }
   });
 }
 
-Repl.prototype.deliverContent = function(content, execute){
+Repl.prototype.deliverContent = function(content){
   var transformer = this.transformers[this.settings.data.transformer];
   transformer.beforeTransform();
 
   try {
     var es5 = transformer.transform(content);
-    if(execute !== undefined && !execute) return es5;
-
-    if (this.output)
-      this.output.setValue(es5);
 
     chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
       if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
@@ -67,7 +63,7 @@ Repl.prototype.deliverContent = function(content, execute){
 }
 
 Repl.prototype.toggleOutput = function(e) {
-  this.output = this.output || CodeMirror.fromTextArea(document.getElementById("output"), {
+  this.output = this.output || CodeMirror.fromTextArea($('#output')[0], {
     lineNumbers: true,
     tabSize: 2,
     readOnly: true,
@@ -87,8 +83,11 @@ Repl.prototype.toggleOutput = function(e) {
 
 Repl.prototype.updateOutput = function() {
   if(this.output === undefined) return;
-  var es5 = this.deliverContent(this.editor.getValue(), false);
-  this.output.setValue(es5);
+  try {
+    var input = this.editor.getValue();
+    var es5 = this.transformers[this.settings.data.transformer].transform(input);
+    this.output.setValue(es5);
+  } catch(e) {}
 }
 
 Repl.prototype.onWindowResize = function() {
@@ -114,23 +113,23 @@ Repl.prototype.resizeOutput = function(e) {
 Repl.prototype.addEventListeners = function() {
   var _this = this;
 
-  document.querySelector('.execute-script').addEventListener('click', function(){
+  $('.execute-script')[0].addEventListener('click', function(){
     _this.deliverContent(_this.editor.getValue());
   });
 
-  document.getElementById('toggleOutput').addEventListener('click', function(e){
+  $('#toggleOutput')[0].addEventListener('click', function(e){
     _this.toggleOutput(e);
   });
 
-  document.onkeydown = function(e){
+  document.addEventListener('keydown', debounce(_this.updateOutput, 500, _this));
+  document.addEventListener('keydown', function(e) {
     if(e[combinationKey] && e.which == 13) {
       _this.deliverContent(_this.editor.getValue());
     }
-    debounce(_this.updateOutput, 500, _this)();
-  };
+  });
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
-  document.getElementById('resize').addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
+  $('#resize')[0].addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
 
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);

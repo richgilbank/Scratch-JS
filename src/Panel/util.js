@@ -12,3 +12,7 @@ function debounce(fn, delay, ctx) {
 function logError(err) {
   chrome.devtools.inspectedWindow.eval("console.error(\"" + err + "\");");
 }
+
+function $(query) {
+  return document.querySelectorAll(query)
+}
