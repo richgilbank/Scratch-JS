@@ -29,11 +29,11 @@ Settings.prototype.onDomReady = function() {
       _this.data = data;
       _this.setFormDefaults(data);
       for(key in data) {
-        _this.repl.bus.trigger('settings:changed:' + key, data[key]);
+        bus.trigger('settings:changed:' + key, data[key]);
       }
     }
 
-    _this.repl.insertRuntime();
+    bus.trigger('settings:changed:transpiler', _this.data.transpiler.handle);
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {
@@ -102,7 +102,7 @@ Settings.prototype.set = function(settings, cb) {
       cb();
 
     for(key in settings) {
-      _this.repl.bus.trigger('settings:changed:' + key, settings[key]);
+      bus.trigger('settings:changed:' + key, settings[key]);
     }
   });
 }
