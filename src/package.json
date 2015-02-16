@@ -15,6 +15,7 @@
   "devDependencies": {
     "6to5": "3.3.12",
     "del": "^1.1.1",
+    "gulp": "^3.8.11",
     "gulp-usemin": "^0.3.11",
     "gulp-zip": "^2.0.2",
     "tiny-lr": "^0.1.5",
