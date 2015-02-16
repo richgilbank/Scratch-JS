@@ -6,7 +6,7 @@ function Settings(repl) {
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
-    transpiler: 'to5',
+    transformer: 'to5',
     theme: 'solarized dark'
   }
 
@@ -20,7 +20,7 @@ Settings.prototype.onDomReady = function() {
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
-    if(typeof data === undefined || !data.hasOwnProperty('transpiler')) {
+    if(typeof data === undefined || !data.hasOwnProperty('transformer')) {
       _this.set(_this.DEFAULTS, function() {
         _this.setFormDefaults(_this.data);
       });
@@ -29,11 +29,12 @@ Settings.prototype.onDomReady = function() {
       _this.data = data;
       _this.setFormDefaults(data);
       for(key in data) {
-        _this.repl.bus.trigger('settings:changed:' + key, data[key]);
+        bus.trigger('settings:changed:' + key, data[key]);
       }
     }
 
-    _this.repl.insertRuntime();
+    document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
+    bus.trigger('settings:changed:transformer', _this.data.transformer.handle);
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {
@@ -44,10 +45,9 @@ Settings.prototype.onDomReady = function() {
     document.querySelector('.settings').classList.remove('is-active');
   });
 
-  [].forEach.call(document.querySelectorAll('input[name="transpiler"]'), function (el) {
-    el.addEventListener('click', function(e) {
-      _this.set({ transpiler: e.target.value });
-    });
+  document.querySelector('.transformer-options').addEventListener('click', function(e) {
+    if(e.target.name === 'transformer')
+      _this.set({ transformer: e.target.value });
   });
 
   [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
@@ -57,8 +57,22 @@ Settings.prototype.onDomReady = function() {
   });
 }
 
+Settings.prototype.transformerOptionTemplate = function(transformers) {
+  var template = '';
+  for(var i in transformers) {
+    var t = transformers[i];
+    template +=
+      '<div>' +
+        '<label>' +
+          '<input type="radio" name="transformer" value="' + t.handle + '"' + (t._active ? ' checked' : '') + '>' +
+          t.name +
+        '</label>' +
+      '</div>'
+  }
+  return template;
+}
+
 Settings.prototype.setFormDefaults = function() {
-  document.querySelector('[name="transpiler"][value="' + this.data.transpiler + '"]').checked = true;
   document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
 }
 
@@ -102,7 +116,7 @@ Settings.prototype.set = function(settings, cb) {
       cb();
 
     for(key in settings) {
-      _this.repl.bus.trigger('settings:changed:' + key, settings[key]);
+      bus.trigger('settings:changed:' + key, settings[key]);
     }
   });
 }

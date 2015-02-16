@@ -11,7 +11,7 @@ var FILES = {
     '!package.json',
     '!gulpfile.js'
   ],
-  watch: ['panel/*.{js,css,html}'],
+  watch: ['panel/**/*.{js,css,html}'],
   panel: 'panel/repl.html',
   dist: '../dist/',
   distPanel: '../dist/panel/',

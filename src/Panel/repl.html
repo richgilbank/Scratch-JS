@@ -43,19 +43,8 @@ http://kangax.github.io/compat-table/es6/#tr
     <div class="settings__section">
       <div class="loading settings__spinner"></div>
 
-      <h4>6to5 or Tracuer?</h4>
-      <div>
-        <label>
-          <input type="radio" name="transpiler" value="to5">
-          6to5
-        </label>
-      </div>
-      <div>
-        <label>
-          <input type="radio" name="transpiler" value="traceur">
-          Traceur
-        </label>
-      </div>
+      <h4>Transformer</h4>
+      <div class="transformer-options"></div>
 
       <h4>Theme</h4>
       <div>
@@ -84,8 +73,12 @@ http://kangax.github.io/compat-table/es6/#tr
 <script src="../node_modules/6to5/browser.js"></script>
 
 <script src="events.js"></script>
+<script src="index.js"></script>
 <script src="settings.js"></script>
 <script src="util.js"></script>
+<script src="transformers/transformer.js"></script>
+<script src="transformers/traceur.js"></script>
+<script src="transformers/babel.js"></script>
 <script src="repl.js"></script>
 
 <script src="codemirror/codemirror.js"></script>

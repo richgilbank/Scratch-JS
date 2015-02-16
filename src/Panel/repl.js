@@ -2,13 +2,15 @@
   The Repl interface / app
  ---------------------------------*/
 var combinationKey = 'metaKey';
-function Repl() {
-  this.RUNTIME_PATHS = {
-    'traceur': 'node_modules/traceur/bin/traceur-runtime.js',
-    'to5': 'node_modules/6to5/browser-polyfill.js'
-  }
 
-  this.bus = new Events();
+function Repl() {
+
+  var registered = bus.trigger('transformers:register');
+  this.transformers = {};
+  registered.forEach(function(v) {
+    this.transformers[v.handle] = v;
+  }, this);
+
   this.settings = new Settings(this);
 
   this.DOM = {
@@ -20,22 +22,7 @@ function Repl() {
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
 }
 
-Repl.prototype.insertRuntime = function() {
-  var transpiler = this.settings.data.transpiler;
-  if(this.RUNTIME_PATHS[transpiler]) {
-    var str =
-      "if(!document.querySelector('#"+transpiler+"')) {" +
-        "var st = document.createElement('script');" +
-        "st.id='"+ transpiler +"';" +
-        "st.src = '"+chrome.extension.getURL(this.RUNTIME_PATHS[transpiler])+"';" +
-        "(document.head||document.documentElement).appendChild(st);" +
-      "}";
-    chrome.devtools.inspectedWindow.eval(str)
-  }
-}
-
 Repl.prototype.onDomReady = function() {
-  var _this = this;
   this.addEventListeners.call(this);
 
   this.width = window.innerWidth;
@@ -59,16 +46,11 @@ Repl.prototype.onDomReady = function() {
 }
 
 Repl.prototype.deliverContent = function(content){
-  if(this.settings.data.transpiler === 'traceur')
-    traceur.options.experimental = true;
+  var transformer = this.transformers[this.settings.data.transformer];
+  transformer.beforeTransform();
 
   try {
-    if(this.settings.data.transpiler === 'traceur') {
-      var es5 = traceur.Compiler.script(content);
-    }
-    if(this.settings.data.transpiler === 'to5') {
-      var es5 = to5.transform(content).code;
-    }
+    var es5 = transformer.transform(content);
 
     if (this.output)
       this.output.setValue(es5);
@@ -141,18 +123,13 @@ Repl.prototype.addEventListeners = function() {
   };
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
-
   document.getElementById('resize').addEventListener('mousedown', debounce(this.onReizeMousedown.bind(this)), 200);
 
-  this.bus.on('settings:changed:theme', function(theme) {
-    _this.editor.setOption('theme', theme);
-    if(_this.output) _this.output.setOption('theme', theme);
-  });
-
-  this.bus.on('settings:changed:transpiler', function(transpiler) {
-    _this.insertRuntime();
-  });
+  bus.on('settings:changed:theme', function(theme) {
+    this.editor.setOption('theme', theme);
+    if(this.output) this.output.setOption('theme', theme);
+  }, this);
 }
 
 // Instantiate the object
-var repl = new Repl();
+window.repl = new Repl();
