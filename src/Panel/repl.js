@@ -45,12 +45,13 @@ Repl.prototype.onDomReady = function() {
   });
 }
 
-Repl.prototype.deliverContent = function(content){
+Repl.prototype.deliverContent = function(content, execute){
   var transformer = this.transformers[this.settings.data.transformer];
   transformer.beforeTransform();
 
   try {
     var es5 = transformer.transform(content);
+    if(execute !== undefined && !execute) return es5;
 
     if (this.output)
       this.output.setValue(es5);
@@ -80,16 +81,21 @@ Repl.prototype.toggleOutput = function(e) {
   e.target.classList.toggle('is-open');
 
   if (!this.DOM.output.classList.contains('is-hidden')) {
-    this.deliverContent(this.editor.getValue());
+    this.updateOutput();
   }
-
 };
+
+Repl.prototype.updateOutput = function() {
+  if(this.output === undefined) return;
+  var es5 = this.deliverContent(this.editor.getValue(), false);
+  this.output.setValue(es5);
+}
 
 Repl.prototype.onWindowResize = function() {
   this.width = window.innerWidth;
 };
 
-Repl.prototype.onReizeMousedown = function() {
+Repl.prototype.onResizeMousedown = function() {
   var resizeOutput = this.resizeOutput.bind(this);
   this.DOM.body.classList.add('is-resizing');
   document.addEventListener('mousemove', resizeOutput);
@@ -120,14 +126,19 @@ Repl.prototype.addEventListeners = function() {
     if(e[combinationKey] && e.which == 13) {
       _this.deliverContent(_this.editor.getValue());
     }
+    debounce(_this.updateOutput, 500, _this)();
   };
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
-  document.getElementById('resize').addEventListener('mousedown', debounce(this.onReizeMousedown.bind(this)), 200);
+  document.getElementById('resize').addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
 
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);
     if(this.output) this.output.setOption('theme', theme);
+  }, this);
+
+  bus.on('settings:changed:transformer', function() {
+    this.updateOutput();
   }, this);
 }
 
