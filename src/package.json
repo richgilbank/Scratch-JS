@@ -14,6 +14,7 @@
   "homepage": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension",
   "devDependencies": {
     "babel": "^4.0.1",
+    "coffee-script": "https://github.com/jashkenas/coffeescript/archive/1.9.0.tar.gz",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
     "gulp-usemin": "^0.3.11",
