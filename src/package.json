@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension",
   "devDependencies": {
-    "6to5": "3.3.12",
+    "babel": "^4.0.1",
     "del": "^1.1.1",
     "gulp": "^3.8.11",
     "gulp-usemin": "^0.3.11",

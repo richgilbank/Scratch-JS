@@ -121,7 +121,7 @@ Repl.prototype.addEventListeners = function() {
     _this.toggleOutput(e);
   });
 
-  document.addEventListener('keydown', debounce(_this.updateOutput, 500, _this));
+  document.addEventListener('keydown', debounce(_this.updateOutput, 200, _this));
   document.addEventListener('keydown', function(e) {
     if(e[combinationKey] && e.which == 13) {
       _this.deliverContent(_this.editor.getValue());

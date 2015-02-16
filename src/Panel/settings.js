@@ -6,7 +6,7 @@ function Settings(repl) {
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
-    transformer: 'to5',
+    transformer: 'babel',
     theme: 'solarized dark'
   }
 

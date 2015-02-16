@@ -2,8 +2,8 @@ function Babel() {
   Transformer.call(this);
 
   this.name = 'Babel';
-  this.handle = 'to5';
-  this.runtimePath = 'node_modules/6to5/browser-polyfill.js';
+  this.handle = 'babel';
+  this.runtimePath = 'node_modules/babel/browser-polyfill.js';
   this.opts = {
     experimental: true
   };
