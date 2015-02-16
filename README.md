@@ -16,6 +16,18 @@ Both [Traceur](https://google.github.io/traceur-compiler/demo/repl.html#) and [6
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2v3n38193y2L372c3o3a/Image%202015-02-08%20at%2011.36.26%20AM.png)
 
+### Contributing and local development
+To get it running locally, you'll need to clone the repo, install gulp and other project dependencies, then run the gulp task:
+```
+git clone git@github.com:richgilbank/ES6-Repl-Chrome-Extension.git && cd ES6-Repl-Chrome-Extension/src
+npm install -g gulp
+npm install
+gulp
+```
+You'll then need to install it locally in Chrome. Go to the URL `chrome://extensions` and select 'Developer mode', then click 'Load unpacked extension...' and navigate to the `src` directory of the project and open it. 
+The gulp task will reload the panel every time you make a change to a file in the `panel` directory.
+Happy development!
+
 =========================
 
 Traceur is released under an [Apache 2.0 license](https://github.com/google/traceur-compiler/blob/master/LICENSE) and 6to5 is released under [MIT](https://github.com/6to5/6to5/blob/master/LICENSE). They belong to their respective owners. 

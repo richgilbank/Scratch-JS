@@ -2,9 +2,11 @@
 <head>
 <title>Traceur</title>
 
+<!-- build:css repl.css -->
 <link rel="stylesheet" href="codemirror/codemirror.css">
 <link rel="stylesheet" href="codemirror/solarized.css">
 <link rel="stylesheet" href="repl.css">
+<!-- endbuild -->
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 </head>
@@ -73,9 +75,18 @@ http://kangax.github.io/compat-table/es6/#tr
   </div>
 </div>
 
-<script type="text/javascript" src="../node_modules/traceur/bin/traceur.js"></script>
-<script type="text/javascript" src="../node_modules/6to5/browser.js"></script>
-<script type="text/javascript" src="repl.js"></script>
+<!-- build:remove -->
+<script src="../node_modules/tiny-lr/node_modules/livereload-js/dist/livereload.js?host=localhost&port=35729"></script>
+<!-- endbuild -->
+
+<!-- build:js repl.js -->
+<script src="../node_modules/traceur/bin/traceur.js"></script>
+<script src="../node_modules/6to5/browser.js"></script>
+
+<script src="events.js"></script>
+<script src="settings.js"></script>
+<script src="util.js"></script>
+<script src="repl.js"></script>
 
 <script src="codemirror/codemirror.js"></script>
 <script src="codemirror/matchbrackets.js"></script>
@@ -83,6 +94,7 @@ http://kangax.github.io/compat-table/es6/#tr
 <script src="codemirror/comment.js"></script>
 <script src="codemirror/javascript.js"></script>
 <script src="codemirror/closebrackets.js"></script>
+<!-- endbuild -->
 
 </body>
 </html>
