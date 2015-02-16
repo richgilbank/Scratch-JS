@@ -1,6 +1,6 @@
 function Transformer() {
-  bus.on('transpilers:register', this.registerSelf, this);
-  bus.on('settings:changed:transpiler', this.insertRuntime, this);
+  bus.on('transformers:register', this.registerSelf, this);
+  bus.on('settings:changed:transformer', this.insertRuntime, this);
 }
 
 // Attributes to override on the subclass
@@ -12,6 +12,9 @@ Transformer.prototype = {
 
   // Optional
   beforeTransform: function() {}
+
+  // Internal
+  _active: false
 }
 
 Transformer.prototype.insertRuntime = function() {
@@ -24,6 +27,15 @@ Transformer.prototype.insertRuntime = function() {
       "document.head.appendChild(st);" +
     "}";
   chrome.devtools.inspectedWindow.eval(str)
+}
+
+Transformer.prototype.onTransformerChange = function(newTransformer) {
+  if(this._active && newTransformer !== this.handle) {
+    // TODO: Remove runtime
+  } else if(newTransformer === this.handle) {
+    this.insertRuntime();
+    this._active = true;
+  }
 }
 
 Transformer.prototype.registerSelf = function() {

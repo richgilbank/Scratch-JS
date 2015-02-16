@@ -5,10 +5,10 @@ var combinationKey = 'metaKey';
 
 function Repl() {
 
-  var registered = bus.trigger('transpilers:register');
-  this.transpilers = {};
+  var registered = bus.trigger('transformers:register');
+  this.transformers = {};
   registered.forEach(function(v) {
-    this.transpilers[v.handle] = v;
+    this.transformers[v.handle] = v;
   }, this);
 
   this.settings = new Settings(this);
@@ -23,7 +23,6 @@ function Repl() {
 }
 
 Repl.prototype.onDomReady = function() {
-  var _this = this;
   this.addEventListeners.call(this);
 
   this.width = window.innerWidth;
@@ -47,10 +46,11 @@ Repl.prototype.onDomReady = function() {
 }
 
 Repl.prototype.deliverContent = function(content){
-  this.settings.data.transpiler.beforeTransform();
+  var transformer = this.transformers[this.settings.data.transformer];
+  transformer.beforeTransform();
 
   try {
-    var es5 = this.settings.data.transpiler.transform(content);
+    var es5 = transformer.transform(content);
 
     if (this.output)
       this.output.setValue(es5);
@@ -123,17 +123,11 @@ Repl.prototype.addEventListeners = function() {
   };
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
-
   document.getElementById('resize').addEventListener('mousedown', debounce(this.onReizeMousedown.bind(this)), 200);
 
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);
     if(this.output) this.output.setOption('theme', theme);
-  }, this);
-
-  bus.on('settings:changed:transpiler', function(transpilerHandle) {
-    this.settings.data.transpiler = this.transpilers[transpilerHandle];
-    this.settings.data.transpiler.insertRuntime();
   }, this);
 }
 

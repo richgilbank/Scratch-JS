@@ -6,7 +6,7 @@ function Settings(repl) {
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
-    transpiler: 'to5',
+    transformer: 'to5',
     theme: 'solarized dark'
   }
 
@@ -20,7 +20,7 @@ Settings.prototype.onDomReady = function() {
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
-    if(typeof data === undefined || !data.hasOwnProperty('transpiler')) {
+    if(typeof data === undefined || !data.hasOwnProperty('transformer')) {
       _this.set(_this.DEFAULTS, function() {
         _this.setFormDefaults(_this.data);
       });
@@ -33,7 +33,7 @@ Settings.prototype.onDomReady = function() {
       }
     }
 
-    bus.trigger('settings:changed:transpiler', _this.data.transpiler.handle);
+    bus.trigger('settings:changed:transformer', _this.data.transformer.handle);
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {
@@ -44,9 +44,9 @@ Settings.prototype.onDomReady = function() {
     document.querySelector('.settings').classList.remove('is-active');
   });
 
-  [].forEach.call(document.querySelectorAll('input[name="transpiler"]'), function (el) {
+  [].forEach.call(document.querySelectorAll('input[name="transformer"]'), function (el) {
     el.addEventListener('click', function(e) {
-      _this.set({ transpiler: e.target.value });
+      _this.set({ transformer: e.target.value });
     });
   });
 
@@ -58,7 +58,7 @@ Settings.prototype.onDomReady = function() {
 }
 
 Settings.prototype.setFormDefaults = function() {
-  document.querySelector('[name="transpiler"][value="' + this.data.transpiler + '"]').checked = true;
+  document.querySelector('[name="transformer"][value="' + this.data.transformer + '"]').checked = true;
   document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
 }
 
