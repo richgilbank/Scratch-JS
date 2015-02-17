@@ -13,11 +13,11 @@ var FILES = {
   ],
   watch: ['panel/**/*.{js,css,html}'],
   panel: 'panel/repl.html',
-  dist: '../dist/',
-  distPanel: '../dist/panel/',
-  distAll: '../dist/**',
+  dist: 'dist/',
+  distPanel: 'dist/panel/',
+  distAll: 'dist/**',
   zip: 'ES6 Repl.zip',
-  root: '../'
+  root: './'
 }
 
 gulp.task('dev', function () {
