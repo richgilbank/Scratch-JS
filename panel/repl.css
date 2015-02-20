@@ -95,6 +95,7 @@ hr {
 
 .CodeMirror {
   height: auto;
+  line-height: 1.45em;
 }
 
 .actions {
