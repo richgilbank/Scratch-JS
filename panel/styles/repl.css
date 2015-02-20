@@ -191,6 +191,10 @@ hr {
   padding: 0 1em;
 }
 
+.settings__option-container {
+  padding: 3px;
+}
+
 .settings__spinner {
   position: absolute;
   bottom: 10px;

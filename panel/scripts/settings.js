@@ -62,10 +62,10 @@ Settings.prototype.transformerOptionTemplate = function(transformers) {
   for(var i in transformers) {
     var t = transformers[i];
     template +=
-      '<div>' +
+      '<div class="settings__option-container">' +
         '<label>' +
           '<input type="radio" name="transformer" value="' + t.handle + '"' + (t._active ? ' checked' : '') + '>' +
-          t.name +
+          ' <span>' + t.name + '</span>' +
         '</label>' +
       '</div>'
   }
