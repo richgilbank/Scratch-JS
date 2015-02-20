@@ -5,7 +5,7 @@
 <!-- build:css repl.css -->
 <link rel="stylesheet" href="../node_modules/codemirror/lib/codemirror.css">
 <link rel="stylesheet" href="../node_modules/codemirror/theme/solarized.css">
-<link rel="stylesheet" href="repl.css">
+<link rel="stylesheet" href="styles/repl.css">
 <!-- endbuild -->
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -64,20 +64,10 @@
 <script src="../node_modules/tiny-lr/node_modules/livereload-js/dist/livereload.js?host=localhost&port=35729"></script>
 <!-- endbuild -->
 
-<!-- build:js repl.js -->
+<!-- build:vendor vendor.js -->
 <script src="../node_modules/traceur/bin/traceur.js"></script>
 <script src="../node_modules/babel/browser.js"></script>
 <script src="../node_modules/coffee-script/extras/coffee-script.js"></script>
-
-<script src="events.js"></script>
-<script src="index.js"></script>
-<script src="settings.js"></script>
-<script src="util.js"></script>
-<script src="transformers/transformer.js"></script>
-<script src="transformers/traceur.js"></script>
-<script src="transformers/babel.js"></script>
-<script src="transformers/coffee.js"></script>
-<script src="repl.js"></script>
 
 <script src="../node_modules/codemirror/lib/codemirror.js"></script>
 <script src="../node_modules/codemirror/addon/edit/matchbrackets.js"></script>
@@ -85,6 +75,18 @@
 <script src="../node_modules/codemirror/addon/comment/comment.js"></script>
 <script src="../node_modules/codemirror/mode/javascript/javascript.js"></script>
 <script src="../node_modules/codemirror/addon/edit/closebrackets.js"></script>
+<!-- endbuild -->
+
+<!-- build:js repl.js -->
+<script src="scripts/events.js"></script>
+<script src="scripts/index.js"></script>
+<script src="scripts/settings.js"></script>
+<script src="scripts/util.js"></script>
+<script src="scripts/transformers/transformer.js"></script>
+<script src="scripts/transformers/traceur.js"></script>
+<script src="scripts/transformers/babel.js"></script>
+<script src="scripts/transformers/coffee.js"></script>
+<script src="scripts/repl.js"></script>
 <!-- endbuild -->
 
 </body>
