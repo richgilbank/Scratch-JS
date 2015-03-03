@@ -14,7 +14,7 @@ It uses one of two engines to transpile ES6 to good-old-fashioned ES5: Google's 
 ### Buy why?
 Both [Traceur](https://google.github.io/traceur-compiler/demo/repl.html#) and [6to5](https://6to5.org/repl/) already have their own REPLs. Why make a Chrome extension? For me it was just the convenience of being able to read a blog about a new feature or syntax and try it right there while I'm reading the article. Pop open the DevTools on the side of the page and give'r.
 
-![](https://s3.amazonaws.com/f.cl.ly/items/2v3n38193y2L372c3o3a/Image%202015-02-08%20at%2011.36.26%20AM.png)
+![](https://s3.amazonaws.com/f.cl.ly/items/2b0E2v0L1z2z060j2l0m/scratch2.jpg)
 
 ### Contributing and local development
 To get it running locally, you'll need to clone the repo, install gulp and other project dependencies, then run the gulp task:
