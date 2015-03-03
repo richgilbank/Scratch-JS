@@ -16,7 +16,7 @@ var FILES = {
   dist: 'dist/',
   distPanel: 'dist/panel/',
   distAll: 'dist/**',
-  zip: 'ES6 Repl.zip',
+  zip: 'Scratch JS.zip',
   root: './'
 }
 

@@ -1,7 +1,7 @@
 {
-  "name": "ES6 Repl",
-  "version": "0.0.10",
-  "description": "ES6 transpiler based on Traceur",
+  "name": "Scratch JS",
+  "version": "0.0.11",
+  "description": "Write and execute ES6 within DevTools!",
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
   "icons": {

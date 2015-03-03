@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
-  'ES6 Repl',
+  'Scratch JS',
   '30.png',
   'panel/repl.html'
 );

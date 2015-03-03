@@ -1,17 +1,17 @@
 {
-  "name": "es6-repl-chrome-extension",
-  "version": "0.0.10",
-  "description": "This extension is an add-on for dev tools which integrates the Google Traceur transpiler (https://github.com/google/traceur-compiler), allowing you to test out the new JS features coming with ECMAScript 6.",
+  "name": "Scratch JS",
+  "version": "0.0.11",
+  "description": "Write ES6 (and other compile-to-JS languages) and execute it on a page from inside DevTools.",
   "repository": {
     "type": "git",
-    "url": "git@github.com:richgilbank/ES6-Repl-Chrome-Extension.git"
+    "url": "git@github.com:richgilbank/Scratch-JS.git"
   },
   "author": "Rich Gilbank (@richgilbank)",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension/issues"
+    "url": "https://github.com/richgilbank/Scratch-JS/issues"
   },
-  "homepage": "https://github.com/richgilbank/ES6-Repl-Chrome-Extension",
+  "homepage": "https://github.com/richgilbank/Scratch-JS",
   "devDependencies": {
     "babel": "^4.0.1",
     "codemirror": "^4.12.0",

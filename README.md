@@ -1,4 +1,4 @@
-## ES6 REPL Chrome Extension
+## Scratch JS
 
 ### What is it?
 It's a Chrome DevTools extension ([available here](https://chrome.google.com/webstore/detail/es6-repl/alploljligeomonipppgaahpkenfnfkn)) that allows you to execute ES6/ESNext/ES2015 code in the context of the page you're viewing, as though it were the standard DevTools console.
