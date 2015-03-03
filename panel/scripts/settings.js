@@ -7,7 +7,7 @@ function Settings(repl) {
   this.repl = repl;
   this.DEFAULTS = this.data = {
     transformer: 'babel',
-    theme: 'solarized dark'
+    theme: 'default'
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
