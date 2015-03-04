@@ -5,11 +5,6 @@ var gulp   = require('gulp'),
     zip    = require('gulp-zip'),
     mfst   = require('./manifest.json');
 
-
-var runtimes  = mfst.web_accessible_resources.reduce(function(glob, runtime) {
-  return glob.concat([runtime.split('/').splice(1).join('/')]);
-}, []).join(',');
-
 var FILES = {
   copy: [
     '*.*',
