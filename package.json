@@ -1,5 +1,5 @@
 {
-  "name": "Scratch JS",
+  "name": "Scratch-JS",
   "version": "0.0.12",
   "description": "Write ES6 (and other compile-to-JS languages) and execute it on a page from inside DevTools.",
   "repository": {
@@ -12,15 +12,17 @@
     "url": "https://github.com/richgilbank/Scratch-JS/issues"
   },
   "homepage": "https://github.com/richgilbank/Scratch-JS",
-  "devDependencies": {
+  "dependencies": {
     "babel": "^4.0.1",
     "codemirror": "^4.12.0",
     "coffee-script": "https://github.com/jashkenas/coffeescript/archive/1.9.0.tar.gz",
+    "traceur": "0.0.72"
+  },
+  "devDependencies": {
     "del": "^1.1.1",
     "gulp": "^3.8.11",
     "gulp-usemin": "^0.3.11",
     "gulp-zip": "^2.0.2",
-    "tiny-lr": "^0.1.5",
-    "traceur": "0.0.72"
+    "tiny-lr": "^0.1.5"
   }
 }

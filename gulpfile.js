@@ -9,7 +9,8 @@ var FILES = {
     '**/*',
     '!{panel,panel/**}',
     '!package.json',
-    '!gulpfile.js'
+    '!gulpfile.js',
+    '!{node_modules,node_modules/**}'
   ],
   watch: ['panel/**/*.{js,css,html}'],
   panel: 'panel/repl.html',
@@ -44,10 +45,10 @@ gulp.task('usemin', ['clean'], function() {
 });
 
 gulp.task('clean', function(cb) {
-  del([FILES.distAll], {force: true}, cb);
+  del([FILES.distAll, FILES.zip], {force: true}, cb);
 });
 
-gulp.task('zip', ['usemin', 'copy'], function() {
+gulp.task('zip', ['clean', 'usemin', 'copy'], function() {
   return gulp.src(FILES.distAll)
     .pipe(zip(FILES.zip))
     .pipe(gulp.dest(FILES.root));
