@@ -34,7 +34,6 @@ Settings.prototype.onDomReady = function() {
     }
 
     document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
-    bus.trigger('settings:changed:transformer', _this.data.transformer.handle);
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {

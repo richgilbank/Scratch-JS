@@ -36,6 +36,7 @@ Transformer.prototype.onTransformerChange = function(newTransformer) {
   } else if(newTransformer === this.handle) {
     this.insertRuntime();
     this._active = true;
+    document.querySelector('input[name="transformer"][value="'+this.handle+'"]').checked = true;
   }
 }
 
