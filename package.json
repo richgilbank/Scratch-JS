@@ -1,6 +1,6 @@
 {
   "name": "Scratch-JS",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Write ES6 (and other compile-to-JS languages) and execute it on a page from inside DevTools.",
   "repository": {
     "type": "git",
