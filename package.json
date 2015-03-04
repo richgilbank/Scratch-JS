@@ -13,7 +13,7 @@
   },
   "homepage": "https://github.com/richgilbank/Scratch-JS",
   "dependencies": {
-    "babel": "^4.0.1",
+    "babel": "^4.6.6",
     "codemirror": "^4.12.0",
     "coffee-script": "https://github.com/jashkenas/coffeescript/archive/1.9.0.tar.gz",
     "traceur": "0.0.72"
