@@ -1,17 +1,23 @@
-var gulp = require('gulp');
-var tinylr = require('tiny-lr');
-var usemin = require('gulp-usemin');
-var del = require('del');
-var zip = require('gulp-zip');
+var gulp   = require('gulp'),
+    tinylr = require('tiny-lr'),
+    usemin = require('gulp-usemin'),
+    del    = require('del'),
+    zip    = require('gulp-zip'),
+    mfst   = require('./manifest.json');
+
+
+var runtimes  = mfst.web_accessible_resources.reduce(function(glob, runtime) {
+  return glob.concat([runtime.split('/').splice(1).join('/')]);
+}, []).join(',');
 
 var FILES = {
   copy: [
-    '**/*',
+    '*.*',
+    'node_modules',
     '!{panel,panel/**}',
     '!package.json',
-    '!gulpfile.js',
-    '!{node_modules,node_modules/**}'
-  ],
+    '!gulpfile.js'
+  ].concat('{' + mfst.web_accessible_resources.join(',') + ',!node_modules/**}'),
   watch: ['panel/**/*.{js,css,html}'],
   panel: 'panel/repl.html',
   dist: 'dist/',
