@@ -2,7 +2,7 @@ function Coffee() {
   Transformer.call(this);
 
   this.name = 'CoffeeScript';
-  this.handle = 'coffee';
+  this.handle = 'coffee-script';
   this.opts = {
     bare: true
   };
