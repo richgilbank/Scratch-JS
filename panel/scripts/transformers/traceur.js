@@ -1,7 +1,7 @@
 function Traceur() {
   Transformer.call(this);
 
-  this.name = 'Traceur';
+  this.name = 'Traceur (' + this.getVersion() + ')';
   this.handle = 'traceur';
   this.runtimePath = 'node_modules/traceur/bin/traceur-runtime.js';
 }
@@ -16,6 +16,11 @@ Traceur.prototype.beforeTransform = function() {
 
 Traceur.prototype.transform = function(input) {
   return traceur.Compiler.script(input);
+}
+
+Traceur.prototype.getVersion = function() {
+  var loader = new traceur.runtime.TraceurLoader();
+  return loader.version.split('@')[1];
 }
 
 var traceurTransformer = new Traceur();
