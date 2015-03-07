@@ -17,6 +17,8 @@ Settings.prototype.onDomReady = function() {
   var _this = this;
   this.domReady = true;
 
+  document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
+
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
@@ -32,8 +34,6 @@ Settings.prototype.onDomReady = function() {
         bus.trigger('settings:changed:' + key, data[key]);
       }
     }
-
-    document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
   });
 
   document.querySelector('.open-settings').addEventListener('click', function() {
