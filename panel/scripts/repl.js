@@ -25,6 +25,16 @@ function Repl() {
 Repl.prototype.onDomReady = function() {
   this.addEventListeners.call(this);
 
+  chrome.devtools.inspectedWindow.getResources(function(resources) {
+    var resources = Array.prototype.filter.call(resources, function(resource) {
+      if(resource.type === 'document') return true;
+      return false;
+    });
+
+    console.log(resources);
+  });
+
+
   this.width = window.innerWidth;
 
   this.editor = CodeMirror.fromTextArea($('#input')[0], {
