@@ -22,18 +22,30 @@ function Repl() {
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
 }
 
-Repl.prototype.onDomReady = function() {
-  this.addEventListeners.call(this);
-
+Repl.prototype.loadContexts = function() {
   chrome.devtools.inspectedWindow.getResources(function(resources) {
     var resources = Array.prototype.filter.call(resources, function(resource) {
       if(resource.type === 'document') return true;
       return false;
+    }).map(function(context) {
+      return {
+        url: context,
+        handle: context.url.split('/').slice(2).join('/').split('?')[0]
+      }
     });
 
-    console.log(resources);
-  });
+    var optionString = '<option value="top">&lt;top frame&gt;</option>';
+    resources.forEach(function(resource) {
+      optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
+    });
 
+    $('.execution-context-selector')[0].innerHTML = optionString;
+  });
+}
+
+Repl.prototype.onDomReady = function() {
+  this.loadContexts();
+  this.addEventListeners(this);
 
   this.width = window.innerWidth;
 
