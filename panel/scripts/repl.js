@@ -11,36 +11,17 @@ function Repl() {
     this.transformers[v.handle] = v;
   }, this);
 
+  this.executionContext = 'top';
   this.settings = new Settings(this);
 
   this.DOM = {
     body: document.body,
     output: $('.output')[0],
-    input: $('.input')[0]
+    input: $('.input')[0],
+    contextSelector: $('.execution-context-selector')[0]
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
-}
-
-Repl.prototype.loadContexts = function() {
-  chrome.devtools.inspectedWindow.getResources(function(resources) {
-    var resources = Array.prototype.filter.call(resources, function(resource) {
-      if(resource.type === 'document') return true;
-      return false;
-    }).map(function(context) {
-      return {
-        url: context,
-        handle: context.url.split('/').slice(2).join('/').split('?')[0]
-      }
-    });
-
-    var optionString = '<option value="top">&lt;top frame&gt;</option>';
-    resources.forEach(function(resource) {
-      optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
-    });
-
-    $('.execution-context-selector')[0].innerHTML = optionString;
-  });
 }
 
 Repl.prototype.onDomReady = function() {
@@ -67,6 +48,36 @@ Repl.prototype.onDomReady = function() {
   });
 }
 
+Repl.prototype.loadContexts = function() {
+  var _this = this;
+
+  chrome.devtools.inspectedWindow.getResources(function(resources) {
+    chrome.devtools.inspectedWindow.eval('document.location.href', function(currentUrl) {
+
+      var contexts = Array.prototype.filter.call(resources, function(resource) {
+        if(resource.type === 'document') {
+          if(resource.url === currentUrl) return false;
+          return true;
+        }
+        return false;
+      }).map(function(context) {
+        return {
+          url: context.url,
+          handle: context.url.split('/').slice(2).join('/').split('?')[0]
+        }
+      });
+
+      var optionString = '<option value="top">&lt;top frame&gt;</option>';
+      contexts.forEach(function(resource) {
+        optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
+      });
+
+      _this.DOM.contextSelector.innerHTML = optionString;
+
+    });
+  });
+}
+
 Repl.prototype.deliverContent = function(content){
   var transformer = this.transformers[this.settings.data.transformer];
   transformer.beforeTransform();
@@ -74,7 +85,10 @@ Repl.prototype.deliverContent = function(content){
   try {
     var es5 = transformer.transform(content);
 
-    chrome.devtools.inspectedWindow.eval(es5, function(result, exceptionInfo) {
+    var evalOptions = {};
+    if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
+
+    chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
       if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
         logError(exceptionInfo.value);
     });
@@ -141,6 +155,10 @@ Repl.prototype.addEventListeners = function() {
 
   $('#toggleOutput')[0].addEventListener('click', function(e){
     _this.toggleOutput(e);
+  });
+
+  this.DOM.contextSelector.addEventListener('change', function(e) {
+    _this.executionContext = this.value;
   });
 
   document.addEventListener('keydown', debounce(_this.updateOutput, 200, _this));
