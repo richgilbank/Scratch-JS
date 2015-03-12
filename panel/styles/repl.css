@@ -23,6 +23,22 @@ hr {
   height: 1px;
 }
 
+.top-nav {
+  height: 25px;
+  width: 100%;
+  background: #fff;
+  border-bottom: 1px solid #ddd;
+}
+
+.execution-context-selector {
+  border: none;
+  background: #fff;
+  height: 25px;
+  margin-left: 28px;
+  font-size: 12px;
+  width: 150px;
+}
+
 .btn {
   border-radius: 2px;
   font-weight: bold;
@@ -96,6 +112,10 @@ hr {
 .CodeMirror {
   height: auto;
   line-height: 1.45em;
+}
+
+.CodeMirror-scroll {
+  height: calc(100% - 26px);
 }
 
 .actions {
