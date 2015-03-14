@@ -27,6 +27,7 @@ function Repl() {
 Repl.prototype.onDomReady = function() {
   this.loadContexts();
   this.addEventListeners(this);
+  chrome.devtools.inspectedWindow.onResourceAdded.addListener(this.loadContexts.bind(this));
 
   this.width = window.innerWidth;
 
