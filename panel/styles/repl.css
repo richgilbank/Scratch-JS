@@ -224,7 +224,7 @@ hr {
 .output {
   position: absolute;
   right: 0;
-  top: 0;
+  top: 26px;
   width: 30%;
   height: 100%;
   resize: both;
