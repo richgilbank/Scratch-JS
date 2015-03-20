@@ -25,9 +25,15 @@ function Repl() {
 }
 
 Repl.prototype.onDomReady = function() {
-  this.loadContexts();
+  var _this = this;
+
+  chrome.devtools.inspectedWindow.eval('document.location.href', function(currentUrl) {
+    _this.topLocation = currentUrl;
+    _this.loadContexts();
+    chrome.devtools.inspectedWindow.onResourceAdded.addListener(_this.loadContexts.bind(_this));
+  });
+
   this.addEventListeners(this);
-  chrome.devtools.inspectedWindow.onResourceAdded.addListener(this.loadContexts.bind(this));
 
   this.width = window.innerWidth;
 
@@ -53,29 +59,27 @@ Repl.prototype.loadContexts = function() {
   var _this = this;
 
   chrome.devtools.inspectedWindow.getResources(function(resources) {
-    chrome.devtools.inspectedWindow.eval('document.location.href', function(currentUrl) {
 
-      var contexts = Array.prototype.filter.call(resources, function(resource) {
-        if(resource.type === 'document') {
-          if(resource.url === currentUrl) return false;
-          return true;
-        }
-        return false;
-      }).map(function(context) {
-        return {
-          url: context.url,
-          handle: context.url.split('/').slice(2).join('/').split('?')[0]
-        }
-      });
-
-      var optionString = '<option value="top">&lt;top frame&gt;</option>';
-      contexts.forEach(function(resource) {
-        optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
-      });
-
-      _this.DOM.contextSelector.innerHTML = optionString;
-
+    var contexts = Array.prototype.filter.call(resources, function(resource) {
+      if(resource.type === 'document') {
+        if(resource.url === _this.topLocation) return false;
+        return true;
+      }
+      return false;
+    }).map(function(context) {
+      return {
+        url: context.url,
+        handle: context.url.split('/').slice(2).join('/').split('?')[0]
+      }
     });
+
+    var optionString = '<option value="top">&lt;top frame&gt;</option>';
+    contexts.forEach(function(resource) {
+      optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
+    });
+
+    _this.DOM.contextSelector.innerHTML = optionString;
+
   });
 }
 
