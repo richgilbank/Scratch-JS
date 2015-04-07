@@ -93,6 +93,11 @@ hr {
   outline: none;
 }
 
+.column {
+  width: 40%;
+  display: inline-block;
+}
+
 .loading {
   opacity: 0;
   display: block;
