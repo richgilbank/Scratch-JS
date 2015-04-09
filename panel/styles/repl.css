@@ -26,17 +26,17 @@ hr {
 .top-nav {
   height: 25px;
   width: 100%;
-  background: #fff;
   border-bottom: 1px solid #ddd;
 }
 
 .execution-context-selector {
   border: none;
-  background: #fff;
+  background: transparent;
   height: 25px;
   margin-left: 28px;
   font-size: 12px;
   width: 150px;
+  color: inherit;
 }
 
 .btn {

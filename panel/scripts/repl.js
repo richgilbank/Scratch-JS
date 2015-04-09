@@ -179,6 +179,10 @@ Repl.prototype.addEventListeners = function() {
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);
     if(this.output) this.output.setOption('theme', theme);
+
+    // Set the top nav color
+    var classes = Array.prototype.slice.call($('.input .CodeMirror')[0].classList);
+    $('.top-nav')[0].className = classes.concat('top-nav').join(' ');
   }, this);
 
   bus.on('settings:changed:transformer', function() {
