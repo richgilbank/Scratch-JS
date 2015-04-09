@@ -154,7 +154,7 @@ Repl.prototype.resizeOutput = function(e) {
 Repl.prototype.addEventListeners = function() {
   var _this = this;
 
-  $('.execute-script')[0].addEventListener('click', function(){
+  $('#executeScript')[0].addEventListener('click', function(){
     _this.deliverContent(_this.editor.getValue());
   });
 

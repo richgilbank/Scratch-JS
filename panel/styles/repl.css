@@ -83,6 +83,10 @@ hr {
   border: 1px solid #b8b8b8;
 }
 
+.btn-secondary:focus {
+  outline: none;
+}
+
 .btn-secondary:active {
   box-shadow: inset 0 2px 0 #ddd;
   background: #e5e5e5;
@@ -91,6 +95,10 @@ hr {
 
 .btn:focus {
   outline: none;
+}
+
+.btn-secondary.is-open {
+  right: 30%;
 }
 
 .column {
@@ -253,14 +261,6 @@ hr {
 
 .input.is-reduced {
   width: 70%;
-}
-
-.toggle-output:focus {
-  outline: none;
-}
-
-.toggle-output.is-open {
-  right: 30%;
 }
 
 .output .CodeMirror {
