@@ -10,7 +10,8 @@ function debounce(fn, delay, ctx) {
 }
 
 function logError(err) {
-  chrome.devtools.inspectedWindow.eval("console.error(\"" + err + "\");");
+  err = JSON.stringify(err);
+  chrome.devtools.inspectedWindow.eval("console.error(\'" + err + "\');");
 }
 
 function $(query) {
