@@ -35,6 +35,7 @@ Repl.prototype.onDomReady = function() {
 
   this.addEventListeners(this);
 
+  this.widgets = [];
   this.width = window.innerWidth;
 
   this.editor = CodeMirror.fromTextArea($('#input')[0], {
@@ -83,16 +84,22 @@ Repl.prototype.loadContexts = function() {
   });
 }
 
+Repl.prototype.removeWidgets = function(){
+  for (var i = 0; i < this.widgets.length; ++i){
+    this.editor.removeLineWidget(this.widgets[i]);
+  }
+  this.widgets.length = 0;
+}
+
 Repl.prototype.deliverContent = function(content){
   var transformer = this.transformers[this.settings.data.transformer];
   transformer.beforeTransform();
 
   try {
     var es5 = transformer.transform(content);
-
     var evalOptions = {};
     if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
-
+    console.log(es5);
     chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
       if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
         logError(exceptionInfo.value);
@@ -126,7 +133,10 @@ Repl.prototype.updateOutput = function() {
   if(this.output === undefined) return;
   try {
     var input = this.editor.getValue();
-    var es5 = this.transformers[this.settings.data.transformer].transform(input);
+    var transformer = this.transformers[this.settings.data.transformer];
+    transformer.beforeTransform();
+
+    var es5 = transformer.transform(input);
     this.output.setValue(es5);
   } catch(e) {}
 }
@@ -187,6 +197,26 @@ Repl.prototype.addEventListeners = function() {
 
   bus.on('settings:changed:transformer', function() {
     this.updateOutput();
+  }, this);
+
+  
+  bus.on('transformers:beforeTransform',function(loc,message){
+    this.removeWidgets();
+  }, this);
+
+  bus.on('transformers:error',function(loc,message){
+    var msgEl = document.createElement("div");
+    msgEl.className = "line-error";
+    var icon = msgEl.appendChild(document.createElement("span"));
+    icon.innerHTML = "!";
+    icon.className = "line-error-icon";
+
+    var msgInfoEl = document.createElement("div");
+    msgInfoEl.className = 'line-error-info';
+    msgInfoEl.innerHTML = message;
+    msgEl.appendChild(msgInfoEl);
+    
+    this.widgets.push(this.editor.addLineWidget(loc.line, msgEl, {coverGutter: false, noHScroll: true}));
   }, this);
 }
 
