@@ -100,10 +100,12 @@ Repl.prototype.deliverContent = function(content){
     var evalOptions = {};
     if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
     console.log(es5);
-    chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
-      if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
-        logError(exceptionInfo.value);
-    });
+    if(typeof es5 == "string"){
+        chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
+          if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
+            logError(exceptionInfo.value);
+        });
+    }
   }
   catch (e) {
     logError(e);
@@ -217,6 +219,7 @@ Repl.prototype.addEventListeners = function() {
     msgEl.appendChild(msgInfoEl);
     
     this.widgets.push(this.editor.addLineWidget(loc.line, msgEl, {coverGutter: false, noHScroll: true}));
+    console.dir(this.widgets);
   }, this);
 }
 
