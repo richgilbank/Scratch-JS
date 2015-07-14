@@ -99,7 +99,6 @@ Repl.prototype.deliverContent = function(content){
     var es5 = transformer.transform(content);
     var evalOptions = {};
     if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
-    console.log(es5);
     if(typeof es5 == "string"){
         chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
           if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
@@ -201,7 +200,7 @@ Repl.prototype.addEventListeners = function() {
     this.updateOutput();
   }, this);
 
-  
+
   bus.on('transformers:beforeTransform',function(loc,message){
     this.removeWidgets();
   }, this);
@@ -217,9 +216,8 @@ Repl.prototype.addEventListeners = function() {
     msgInfoEl.className = 'line-error-info';
     msgInfoEl.innerHTML = message;
     msgEl.appendChild(msgInfoEl);
-    
+
     this.widgets.push(this.editor.addLineWidget(loc.line, msgEl, {coverGutter: false, noHScroll: true}));
-    console.dir(this.widgets);
   }, this);
 }
 

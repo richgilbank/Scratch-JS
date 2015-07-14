@@ -16,18 +16,21 @@ Babel.prototype.constructor = Babel;
 Babel.prototype.beforeTransform = function(){
   bus.trigger('transformers:beforeTransform');
 }
+
 Babel.prototype.transform = function(input) {
-  try{
+  try {
     var ret = babel.transform(input, this.opts).code;
-    return ret
-  }catch(err){
+    return ret;
+  }
+  catch(err) {
     if(err.name === "SyntaxError"){
-      var message = "<pre>"+err.toString()+"</pre>";
-      bus.trigger("transformers:error",{
+      var message = "<pre>" + err.toString() + "</pre>";
+      bus.trigger("transformers:error", {
         line: err.loc.line - 1,
         column: err.loc.column
-      },message);
-    }else{
+      }, message);
+    }
+    else {
       throw err;
     }
     return null;

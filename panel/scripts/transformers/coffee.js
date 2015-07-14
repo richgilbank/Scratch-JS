@@ -12,22 +12,25 @@ function Coffee() {
 Coffee.prototype = Object.create(Transformer.prototype);
 Coffee.prototype.constructor = Coffee;
 
-Coffee.prototype.beforeTransform = function(){
+Coffee.prototype.beforeTransform = function() {
   bus.trigger('transformers:beforeTransform');
 }
+
 Coffee.prototype.transform = function(input) {
   try{
     var ret = CoffeeScript.compile(input, this.opts);
     return ret;
-  }catch(err){
+  }
+  catch(err){
     if(err.name === "SyntaxError"){
-      var message = "<pre>"+err.toString()+"</pre>";
-      bus.trigger("transformers:error",{
+      var message = "<pre>" + err.toString() + "</pre>";
+      bus.trigger("transformers:error", {
         line: err.location.first_line,
         column: err.location.first_column
-      },message);
-    }else{
-      throw err
+      }, message);
+    }
+    else{
+      throw err;
     }
   }
   return null;
