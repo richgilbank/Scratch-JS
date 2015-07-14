@@ -17,3 +17,11 @@ function logError(err) {
 function $(query) {
   return document.querySelectorAll(query)
 }
+
+function xCharacters(number, string) {
+  var buffer = '';
+  for(var i = 0; i < number; i++) {
+    buffer += string;
+  }
+  return buffer;
+}
