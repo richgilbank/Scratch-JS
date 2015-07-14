@@ -205,19 +205,25 @@ Repl.prototype.addEventListeners = function() {
     this.removeWidgets();
   }, this);
 
-  bus.on('transformers:error',function(loc,message){
+  bus.on('transformers:error',function(err){
     var msgEl = document.createElement("div");
     msgEl.className = "line-error";
     var icon = msgEl.appendChild(document.createElement("span"));
     icon.innerHTML = "!";
     icon.className = "line-error-icon";
 
+    var message = "<pre>(" + (err.line + 1) + ":" + err.column + ") " + err.name + ": ";
+    message += err.message + "\n";
+    message += "|" + this.editor.getLine(err.line) + "\n";
+    message += "|" + xCharacters(err.column, ' ') + "^";
+    message += "</pre>";
+
     var msgInfoEl = document.createElement("div");
     msgInfoEl.className = 'line-error-info';
     msgInfoEl.innerHTML = message;
     msgEl.appendChild(msgInfoEl);
 
-    this.widgets.push(this.editor.addLineWidget(loc.line, msgEl, {coverGutter: false, noHScroll: true}));
+    this.widgets.push(this.editor.addLineWidget(err.line, msgEl, {coverGutter: false, noHScroll: true}));
   }, this);
 }
 

@@ -23,11 +23,12 @@ Coffee.prototype.transform = function(input) {
   }
   catch(err){
     if(err.name === "SyntaxError"){
-      var message = "<pre>" + err.toString() + "</pre>";
       bus.trigger("transformers:error", {
+        name: 'SyntaxError',
+        message: err.message,
         line: err.location.first_line,
         column: err.location.first_column
-      }, message);
+      });
     }
     else{
       throw err;

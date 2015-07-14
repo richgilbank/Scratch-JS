@@ -3,7 +3,7 @@ function Babel() {
 
   this.name = 'Babel (' + this.getVersion() + ')';
   this.handle = 'babel';
-  this.runtimePath = 'node_modules/babel/browser-polyfill.js';
+  this.runtimePath = 'node_modules/babel-core/browser-polyfill.js';
   this.opts = {
     experimental: true
   };
@@ -24,11 +24,12 @@ Babel.prototype.transform = function(input) {
   }
   catch(err) {
     if(err.name === "SyntaxError"){
-      var message = "<pre>" + err.toString() + "</pre>";
       bus.trigger("transformers:error", {
+        name: 'SyntaxError',
+        message: err.message,
         line: err.loc.line - 1,
         column: err.loc.column
-      }, message);
+      });
     }
     else {
       throw err;
