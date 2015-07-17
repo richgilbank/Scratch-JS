@@ -76,7 +76,8 @@ Repl.prototype.loadContexts = function() {
 
     var optionString = '<option value="top">&lt;top frame&gt;</option>';
     contexts.forEach(function(resource) {
-      optionString += '<option value="' + resource.url + '">' + resource.handle + '</option>';
+      var selectedString = resource.url === _this.executionContext ? ' selected' : '';
+      optionString += '<option value="' + resource.url + '"' + selectedString + '>' + resource.handle + '</option>';
     });
 
     _this.DOM.contextSelector.innerHTML = optionString;
