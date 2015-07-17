@@ -27,6 +27,8 @@ hr {
   height: 25px;
   width: 100%;
   border-bottom: 1px solid #ddd;
+  position: fixed;
+  z-index: 102;
 }
 
 .execution-context-selector {
@@ -239,10 +241,14 @@ hr {
   right: 0;
   top: 26px;
   width: 30%;
-  height: 100%;
+  height: calc(100% - 26px);
   resize: both;
   overflow: auto;
   z-index: 101;
+}
+
+.output .CodeMirror {
+  height: 100%;
 }
 
 .output .CodeMirror.cm-s-solarized.cm-s-dark,
@@ -257,6 +263,10 @@ hr {
 
 .output.is-hidden {
   display: none;
+}
+
+.input .CodeMirror {
+  top: 26px;
 }
 
 .input.is-reduced {
