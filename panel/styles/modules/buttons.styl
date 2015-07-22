@@ -1,0 +1,47 @@
+.btn
+  border-radius: 2px;
+  font-weight: bold;
+  font-size: 12px;
+  cursor: pointer;
+  padding: 6px 12px;
+
+  &:focus
+    outline: none;
+
+.btn-primary
+  background: #4d90fe;
+  border: 1px solid #3079ed;
+  color: white;
+
+  &:hover
+    box-shadow: inset 0 -1px 0 #2f69c2;
+    background-color: #4285f4;
+    background-image: -webkit-linear-gradient(top,transparent,transparent);
+    border: 1px solid transparent;
+    border-bottom-color: #2f69c2;
+
+  &:active
+    box-shadow: inset 0 1px 0 #21448d;
+    background: #2c56b1;
+    border: 1px solid transparent;
+    border-top: 1px solid #21448d;
+
+.btn-secondary
+  box-shadow: 0 1px 0 rgba(0,0,0,.05);
+  background: white;
+  padding: 7px 12px;
+  background-image: -webkit-linear-gradient(top,transparent,transparent);
+  border: 1px solid rgba(0,0,0,.15);
+  color: #404040;
+
+  &:hover
+    box-shadow: 0 1px 0 rgba(0,0,0,.1);
+    border: 1px solid #b8b8b8;
+
+  &:focus
+    outline: none;
+
+  &:active
+    box-shadow: inset 0 2px 0 #ddd;
+    background: #e5e5e5;
+    color: #262626;
