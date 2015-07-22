@@ -103,11 +103,6 @@ hr {
   right: 30%;
 }
 
-.column {
-  width: 40%;
-  display: inline-block;
-}
-
 .loading {
   opacity: 0;
   display: block;
@@ -163,13 +158,17 @@ hr {
   left: 0;
   pointer-events: none;
   z-index: 103;
+  display: flex;
+  justify-content: center;
 }
 
 .settings__panel {
+  flex: 0 0 auto;
+  align-self: center;
   background: #fff;
-  position: absolute;
   width: 40%;
   height: 60%;
+  min-width: 400px;
   left: 30%;
   top: 20%;
   opacity: 0;
@@ -178,10 +177,12 @@ hr {
   pointer-events: none;
   -webkit-transform: scale(0.9) translateY(40px) rotateX(-20deg);
   transition: all 200ms ease;
+  overflow: scroll;
 }
 
 @media (max-width: 500px) {
   .settings__panel {
+    min-width: 0;
     width: 80%;
     height: 80%;
     left: 10%;
@@ -226,8 +227,25 @@ hr {
   padding: 0 1em;
 }
 
+.settings__content {
+  display: flex;
+}
+
+.settings-column {
+  flex: 1 1 auto;
+}
+
 .settings__option-container {
   padding: 3px;
+}
+
+.settings__option-container input[type="radio"] {
+  position: absolute;
+}
+
+.settings__option-container span {
+  padding-left: 25px;
+  display: inline-block;
 }
 
 .settings__spinner {
