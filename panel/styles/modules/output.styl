@@ -1,0 +1,37 @@
+.output
+  position absolute
+  right 0
+  top 26px
+  width 30%
+  height calc(100% - 26px)
+  resize both
+  overflow auto
+  z-index 101
+
+  &.is-hidden
+    display none
+
+  .CodeMirror
+    height 100%
+    box-shadow none
+    -webkit-box-shadow none
+
+  .CodeMirror.cm-s-solarized.cm-s-dark,
+  .CodeMirror.cm-s-solarized.cm-s-dark .CodeMirror-gutters
+    background-color #001E25
+
+  .CodeMirror.cm-s-default,
+  .CodeMirror.cm-s-default .CodeMirror-gutters
+    background-color #F7F7F7
+
+.resize
+  height 100%
+  width 5px
+  border-left 1px solid #A3A3A3
+  background transparent
+  cursor col-resize
+  position absolute
+  left 0
+  top 0
+  z-index 101
+

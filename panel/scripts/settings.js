@@ -76,14 +76,14 @@ Settings.prototype.setFormDefaults = function() {
 }
 
 Settings.prototype.loadingOn = function() {
-  [].forEach.call(document.querySelectorAll('.loading'), function(el) {
+  [].forEach.call(document.querySelectorAll('.settings__spinner'), function(el) {
     if(this.domReady)
       el.classList.add('is-active');
   }.bind(this));
 }
 
 Settings.prototype.loadingOff = function() {
-  [].forEach.call(document.querySelectorAll('.loading'), function(el) {
+  [].forEach.call(document.querySelectorAll('.settings__spinner'), function(el) {
     setTimeout(function(){el.classList.remove('is-active') }, 500);
   }.bind(this));
 }
