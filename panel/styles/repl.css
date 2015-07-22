@@ -7,6 +7,7 @@ body {
   background: #fff;
   font-size: 100%;
   margin: 0;
+  font-family: Roboto, arial, sans-serif;
 }
 
 .is-resizing {
@@ -21,6 +22,10 @@ hr {
   border: none;
   background: #ccc;
   height: 1px;
+}
+
+.type--standard-weight {
+  font-weight: normal;
 }
 
 .top-nav {
@@ -44,7 +49,6 @@ hr {
 .btn {
   border-radius: 2px;
   font-weight: bold;
-  font-family: Roboto, arial, sans-serif;
   font-size: 12px;
   cursor: pointer;
   padding: 6px 12px;
@@ -237,6 +241,7 @@ hr {
 
 .settings__option-container {
   padding: 3px;
+  margin-bottom: 5px;
 }
 
 .settings__option-container input[type="radio"] {
