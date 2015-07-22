@@ -3,7 +3,8 @@ var gulp   = require('gulp'),
     usemin = require('gulp-usemin'),
     del    = require('del'),
     zip    = require('gulp-zip'),
-    mfst   = require('./manifest.json');
+    mfst   = require('./manifest.json')
+    stylus = require('gulp-stylus');
 
 var FILES = {
   copy: [
@@ -14,6 +15,9 @@ var FILES = {
     '!gulpfile.js'
   ].concat('{' + mfst.web_accessible_resources.join(',') + ',!node_modules/**}'),
   watch: ['panel/**/*.{js,css,html}'],
+  stylusRoot: 'panel/styles/',
+  stylusGlob: 'panel/styles/**/*.styl',
+  stylus: 'panel/styles/repl.styl',
   panel: 'panel/repl.html',
   dist: 'dist/',
   distPanel: 'dist/panel/',
@@ -22,9 +26,10 @@ var FILES = {
   root: './'
 }
 
-gulp.task('dev', function () {
+gulp.task('dev', ['stylus'], function () {
   var lr = tinylr();
   lr.listen(35729);
+  gulp.watch(FILES.stylusGlob, ['stylus']);
   gulp.watch(FILES.watch, function (evt) {
     lr.changed({
       body: {
@@ -32,6 +37,12 @@ gulp.task('dev', function () {
       }
     });
   });
+});
+
+gulp.task('stylus', function() {
+  return gulp.src(FILES.stylus)
+    .pipe(stylus())
+    .pipe(gulp.dest(FILES.stylusRoot));
 });
 
 gulp.task('copy', ['clean'], function() {
@@ -49,7 +60,7 @@ gulp.task('clean', function(cb) {
   del([FILES.distAll, FILES.zip], {force: true}, cb);
 });
 
-gulp.task('zip', ['clean', 'usemin', 'copy'], function() {
+gulp.task('zip', ['stylus', 'clean', 'usemin', 'copy'], function() {
   return gulp.src(FILES.distAll)
     .pipe(zip(FILES.zip))
     .pipe(gulp.dest(FILES.root));
