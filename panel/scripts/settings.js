@@ -7,6 +7,9 @@ function Settings(repl) {
   this.repl = repl;
   this.DEFAULTS = this.data = {
     transformer: 'babel',
+    tabSize: 2,
+    indentUnit: 2,
+    indentWithTabs: true,
     theme: 'default'
   }
 
