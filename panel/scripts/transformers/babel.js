@@ -5,7 +5,7 @@ function Babel() {
   this.handle = 'babel';
   this.runtimePath = 'node_modules/babel-core/browser-polyfill.js';
   this.opts = {
-    experimental: true
+    stage: 1
   };
 }
 
