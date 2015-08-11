@@ -101,10 +101,10 @@ Repl.prototype.deliverContent = function(content){
     var evalOptions = {};
     if(this.executionContext !== 'top') evalOptions.frameURL = this.executionContext;
     if(typeof es5 == "string"){
-        chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
-          if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
-            logError(exceptionInfo.value);
-        });
+      chrome.devtools.inspectedWindow.eval(es5, evalOptions, function(result, exceptionInfo) {
+        if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
+          logError(exceptionInfo.value);
+      });
     }
   }
   catch (e) {

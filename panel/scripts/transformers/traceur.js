@@ -10,12 +10,16 @@ function Traceur() {
 Traceur.prototype = Object.create(Transformer.prototype);
 Traceur.prototype.constructor = Traceur;
 
-Traceur.prototype.beforeTransform = function() {
-  traceur.options.experimental = true;
-}
-
 Traceur.prototype.transform = function(input) {
-  return traceur.Compiler.script(input);
+  try {
+    var options = traceur.util.Options.experimental(true);
+    options.script = true;
+    var compiler = new traceur.Compiler(options);
+    return compiler.compile(input);
+  }
+  catch(err) {
+    console.log('error', err.name);
+  }
 }
 
 Traceur.prototype.getVersion = function() {

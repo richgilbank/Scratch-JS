@@ -17,7 +17,7 @@
     "codemirror": "^4.12.0",
     "LiveScript": "https://github.com/gkz/LiveScript/archive/1.3.1.tar.gz",
     "coffee-script": "https://github.com/jashkenas/coffeescript/archive/1.9.0.tar.gz",
-    "traceur": "0.0.72"
+    "traceur": "0.0.91"
   },
   "devDependencies": {
     "del": "^1.1.1",
