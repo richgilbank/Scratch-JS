@@ -54,6 +54,13 @@ Repl.prototype.onDomReady = function() {
       $('#combinationKey')[0].textContent = 'Ctrl';
     }
   });
+
+  var editor = this.editor;
+  chrome.runtime.sendMessage({name: 'getCode'}, function(data) {
+    if (data.code) {
+      editor.setValue(data.code);
+    }
+  });
 }
 
 Repl.prototype.loadContexts = function() {
@@ -163,6 +170,10 @@ Repl.prototype.resizeOutput = function(e) {
   this.DOM.output.style.width = 100 - percentWidth + "%";
 };
 
+Repl.prototype.saveCode = function() {
+  chrome.runtime.sendMessage({name: 'setCode', value: this.editor.getValue()});
+};
+
 Repl.prototype.addEventListeners = function() {
   var _this = this;
 
@@ -179,6 +190,7 @@ Repl.prototype.addEventListeners = function() {
   });
 
   document.addEventListener('keydown', debounce(_this.updateOutput, 200, _this));
+  document.addEventListener('keydown', debounce(_this.saveCode, 1000, _this));
   document.addEventListener('keydown', function(e) {
     if(e[combinationKey] && e.which == 13) {
       _this.deliverContent(_this.editor.getValue());
