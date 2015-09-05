@@ -54,6 +54,23 @@ Settings.prototype.onDomReady = function() {
       _this.set({ theme: e.target.value });
     });
   });
+
+  document.querySelector('#addExternalSource').addEventListener('click', function() {
+    var newSource = document.createElement("input");
+    var inputWrapper = document.createElement("div");
+    newSource.className = "settings__external-source";
+    newSource.addEventListener('change', function() {
+      var include = 'var script=document.createElement("script");script.src="' + this.value + '";script.type="text/javascript";document.body.appendChild(script);';
+      chrome.devtools.inspectedWindow.eval(include, {}, function(result, exceptionInfo) {
+        if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
+          logError(exceptionInfo.value);
+      });
+    });
+    inputWrapper.className = "settings__option-container";
+    inputWrapper.appendChild(newSource);
+    document.querySelector("#includesContainer").appendChild(inputWrapper);
+  });
+
 }
 
 Settings.prototype.transformerOptionTemplate = function(transformers) {
