@@ -55,16 +55,20 @@ Settings.prototype.onDomReady = function() {
     });
   });
 
-  document.querySelector('#addExternalSource').addEventListener('click', function() {
+  document.querySelector("#addExternalSource").addEventListener("click", function() {
     var newSource = document.createElement("input");
     var inputWrapper = document.createElement("div");
     newSource.className = "settings__external-source";
-    newSource.addEventListener('change', function() {
-      var include = 'var script=document.createElement("script");script.src="' + this.value + '";script.type="text/javascript";document.body.appendChild(script);';
-      chrome.devtools.inspectedWindow.eval(include, {}, function(result, exceptionInfo) {
-        if(typeof exceptionInfo !== 'undefined' && exceptionInfo.hasOwnProperty('isException'))
-          logError(exceptionInfo.value);
-      });
+    newSource.addEventListener("change", function() {
+      chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + this.value + "\"]')", {}, function(result) {
+        if(result) {
+          var include = "var script=document.createElement('script');script.src='" + this.value + "';script.type='text/javascript';document.body.appendChild(script);";
+          chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
+            if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException"))
+              logError(exceptionInfo.value);
+          });
+        }
+      }.bind(this));
     });
     inputWrapper.className = "settings__option-container";
     inputWrapper.appendChild(newSource);

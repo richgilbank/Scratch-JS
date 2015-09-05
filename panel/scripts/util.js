@@ -14,6 +14,10 @@ function logError(err) {
   chrome.devtools.inspectedWindow.eval("console.error(\'" + err + "\');");
 }
 
+function log(msg) {
+  chrome.devtools.inspectedWindow.eval("console.log(\'" + msg + "\');");
+}
+
 function $(query) {
   return document.querySelectorAll(query)
 }
