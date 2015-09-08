@@ -15,13 +15,13 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
       break;
     case 'getCode':
       chrome.storage.sync.get('code', function (data) {
-        sendResponse(data);    
+        sendResponse(data);
       });
       return true;
       break;
     case 'setCode':
       chrome.storage.sync.set({'code': request.value}, function () {
-        sendResponse('success');  
+        sendResponse('success');
       });
       return true;
       break;
