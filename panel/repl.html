@@ -40,8 +40,24 @@
         <div class="settings__spinner"></div>
         <div class="settings__content">
           <div class="settings-column">
-            <h4 .>Transformer</h4>
+            <h4>Transformer</h4>
             <div class="transformer-options"></div>
+          </div>
+          <div class="settings-column">
+            <h4>Editor</h4>
+            <div class="settings__option-container">
+                <div>tabSize</div>
+                <input type="number" name="tabSize" value="default">
+            </div>
+            <div class="settings__option-container">
+                <div>indentWithTabs</div>
+                <label>
+                    <input type="radio" name="indentWithTabs" value="false" size=2><span>No</span>
+                </label>
+                <label>
+                    <input type="radio" name="indentWithTabs" value="true"><span>Yes</span>
+                </label>
+            </div>
           </div>
           <div class="settings-column">
             <h4>Theme</h4>
