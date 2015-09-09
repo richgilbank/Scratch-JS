@@ -33,3 +33,15 @@
 
 .is-resizing
   -webkit-user-select none
+
+.input--text
+  width 100%
+  border none
+  border-bottom 3px solid #eeeeee
+  font-size inherit
+  padding 8px 0
+  transition all 200ms ease
+
+  &:focus:not([readonly]), &:active:not([readonly])
+    outline none
+    border-bottom-color #4d90fe

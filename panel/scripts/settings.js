@@ -55,26 +55,42 @@ Settings.prototype.onDomReady = function() {
     });
   });
 
-  document.querySelector("#addExternalSource").addEventListener("click", function() {
-    var newSource = document.createElement("input");
-    var inputWrapper = document.createElement("div");
-    newSource.className = "settings__external-source";
-    newSource.addEventListener("change", function() {
-      chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + this.value + "\"]')", {}, function(result) {
-        if(result) {
-          var include = "var script=document.createElement('script');script.src='" + this.value + "';script.type='text/javascript';document.body.appendChild(script);";
-          chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
-            if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException"))
-              logError(exceptionInfo.value);
-          });
+  document.querySelector('.settings').addEventListener('click', function(evt) {
+    if(!~Array.prototype.slice.call(evt.target.classList).indexOf('btn--add-source')) return;
+    var button = evt.target;
+    var input = button.previousElementSibling;
+    var url = input.value;
+    var newRowString = _this.newSourceRow();
+    chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + url + "\"]')", {}, function(result) {
+      if(!result) return;
+      var include = "var script=document.createElement('script');script.src='" + url + "';document.body.appendChild(script);";
+      chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
+        if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException")) {
+          logError(exceptionInfo.value);
+        } else {
+          button.innerHTML = '&#10003;';
+          button.disabled = true;
+          input.readOnly = true;
+          document.querySelector('#includesContainer').appendChild(newRowString);
         }
-      }.bind(this));
-    });
-    inputWrapper.className = "settings__option-container";
-    inputWrapper.appendChild(newSource);
-    document.querySelector("#includesContainer").appendChild(inputWrapper);
+      });
+    }.bind(this));
   });
+}
 
+Settings.prototype.newSourceRow = function() {
+  var row = document.createElement('div');
+  row.className = 'settings__option-container settings__includes-container';
+  var input = document.createElement('input');
+  input.type = 'text';
+  input.className = 'input--text';
+  input.placeholder='External source URL';
+  var button = document.createElement('button');
+  button.className = 'btn btn--add-source';
+  button.innerHTML = '&#10095;';
+  row.appendChild(input);
+  row.appendChild(button);
+  return row;
 }
 
 Settings.prototype.transformerOptionTemplate = function(transformers) {
