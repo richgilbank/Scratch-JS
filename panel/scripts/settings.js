@@ -61,6 +61,7 @@ Settings.prototype.onDomReady = function() {
     var input = button.previousElementSibling;
     var url = input.value;
     var newRowString = _this.newSourceRow();
+    if(url.trim().length === 0) return;
     chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + url + "\"]')", {}, function(result) {
       if(!result) return;
       var include = "var script=document.createElement('script');script.src='" + url + "';document.body.appendChild(script);";
