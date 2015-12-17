@@ -147,6 +147,8 @@ Repl.prototype.updateOutput = function() {
 
     var es5 = transformer.transform(input);
     this.output.setValue(es5);
+
+    this.output.refresh();
   } catch(e) {}
 }
 
