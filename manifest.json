@@ -1,6 +1,6 @@
 {
   "name": "Scratch JS",
-  "version": "0.0.21",
+  "version": "0.0.22",
   "description": "Write and execute ES6/ES2015 within DevTools!",
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
