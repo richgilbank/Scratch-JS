@@ -1,7 +1,7 @@
 {
   "name": "Scratch JS",
   "version": "0.0.21",
-  "description": "Write and execute ES6 within DevTools!",
+  "description": "Write and execute ES6/ES2015 within DevTools!",
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
   "icons": {
@@ -14,7 +14,8 @@
     "tabs"
   ],
   "background": {
-    "scripts": ["background.js"]
+    "scripts": ["background.js"],
+    "persistent": false
   },
   "web_accessible_resources": [
     "node_modules/traceur/bin/traceur-runtime.js",
