@@ -1,5 +1,5 @@
 chrome.devtools.panels.create(
   'Scratch JS',
-  '30.png',
+  'art/48.png',
   'panel/repl.html'
 );
