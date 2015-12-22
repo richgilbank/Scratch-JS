@@ -24,7 +24,7 @@ Traceur.prototype.transform = function(input) {
 
 Traceur.prototype.getVersion = function() {
   var loader = new traceur.runtime.TraceurLoader();
-  return loader.version.split('@')[1];
+  return loader.version;
 }
 
 var traceurTransformer = new Traceur();

@@ -18,7 +18,6 @@
     "persistent": false
   },
   "web_accessible_resources": [
-    "node_modules/traceur/bin/traceur-runtime.js",
-    "node_modules/babel-core/browser-polyfill.js"
+    "node_modules/traceur/bin/traceur-runtime.js"
   ]
 }

@@ -1,25 +1,28 @@
-function Babel() {
+function BabelTransformer() {
   Transformer.call(this);
 
   this.name = 'Babel (' + this.getVersion() + ')';
   this.handle = 'babel';
-  this.runtimePath = 'node_modules/babel-core/browser-polyfill.js';
   this.opts = {
-    stage: 0
+    presets: [
+      'es2015',
+      'stage-0',
+      'stage-1'
+    ]
   };
 }
 
 // Inherit from Transformer
-Babel.prototype = Object.create(Transformer.prototype);
-Babel.prototype.constructor = Babel;
+BabelTransformer.prototype = Object.create(Transformer.prototype);
+BabelTransformer.prototype.constructor = BabelTransformer;
 
-Babel.prototype.beforeTransform = function(){
+BabelTransformer.prototype.beforeTransform = function(){
   bus.trigger('transformers:beforeTransform');
 }
 
-Babel.prototype.transform = function(input) {
+BabelTransformer.prototype.transform = function(input) {
   try {
-    var ret = babel.transform(input, this.opts).code;
+    var ret = Babel.transform(input, this.opts).code;
     return ret;
   }
   catch(err) {
@@ -38,8 +41,8 @@ Babel.prototype.transform = function(input) {
   }
 }
 
-Babel.prototype.getVersion = function() {
-  return babel.version;
+BabelTransformer.prototype.getVersion = function() {
+  return Babel.version;
 }
 
-var babelTransformer = new Babel();
+var babelTransformer = new BabelTransformer();
