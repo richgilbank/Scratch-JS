@@ -5,9 +5,9 @@
   "devtools_page": "es6-repl.html",
   "manifest_version": 2,
   "icons": {
-    "128": "128.png",
-    "48": "48.png",
-    "16": "16.png"
+    "128": "art/128.png",
+    "48": "art/48.png",
+    "16": "art/16.png"
   },
   "permissions": [
     "storage",
