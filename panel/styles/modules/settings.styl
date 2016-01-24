@@ -29,14 +29,14 @@
   background #fff
   width 40%
   height 60%
-  min-width 400px
+  min-width 500px
   left 30%
   top 20%
   opacity 0
   box-shadow 0 5px 20px rgba(200, 200, 200, 0.8)
   border 1px solid #ddd
   pointer-events none
-  -webkit-transform scale(0.9) translateY(40px) rotateX(-20deg)
+  transform scale(0.9) translateY(40px) rotateX(-20deg)
   transition all 200ms ease
   overflow auto
 
@@ -88,7 +88,8 @@
   margin-bottom 5px
   position relative
 
-  input[type="radio"]
+  input[type="radio"],
+  input[type="checkbox"]
     position absolute
 
   span
@@ -107,7 +108,7 @@
   border 3px solid #3b89f3
   border-top-color transparent
   -webkit-animation spin 1s infinite linear
-  -webkit-transition all 500ms ease
+  transition all 500ms ease
 
   &.is-active
     opacity 1
