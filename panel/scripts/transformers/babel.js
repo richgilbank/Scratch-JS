@@ -3,6 +3,7 @@ function BabelTransformer() {
 
   this.name = 'Babel (' + this.getVersion() + ')';
   this.handle = 'babel';
+  this.runtimePath = 'node_modules/babel-core/browser-polyfill.min.js'
   this.opts = {
     presets: [
       'es2015',
