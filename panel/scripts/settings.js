@@ -7,6 +7,9 @@ function Settings(repl) {
   this.repl = repl;
   this.DEFAULTS = this.data = {
     transformer: 'babel',
+    tabSize: 2,
+    indentUnit: 2,
+    indentWithTabs: false,
     theme: 'default'
   }
 
@@ -52,6 +55,21 @@ Settings.prototype.onDomReady = function() {
   [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
     el.addEventListener('click', function(e) {
       _this.set({ theme: e.target.value });
+    });
+  });
+
+  [].forEach.call(document.querySelectorAll('input[name="tabSize"]'), function (el) {
+    el.addEventListener('change', function(e) {
+      var val = parseInt(e.target.value, 10);
+      _this.set({ tabSize: val });
+      _this.set({ indentUnit: val });
+    });
+  });
+
+  [].forEach.call(document.querySelectorAll('input[name="indentWithTabs"]'), function (el) {
+    el.addEventListener('click', function(e) {
+      var val = document.querySelectorAll('input[name="indentWithTabs"]')[0].checked;
+      _this.set({ indentWithTabs: val });
     });
   });
 
@@ -111,6 +129,8 @@ Settings.prototype.transformerOptionTemplate = function(transformers) {
 
 Settings.prototype.setFormDefaults = function() {
   document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
+  document.querySelector('[name="tabSize"]').value = this.data.tabSize;
+  document.querySelector('[name="indentWithTabs"]').checked = this.data.indentWithTabs;
 }
 
 Settings.prototype.loadingOn = function() {

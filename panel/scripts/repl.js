@@ -43,7 +43,9 @@ Repl.prototype.onDomReady = function() {
     matchBrackets: true,
     continueComments: "Enter",
     extraKeys: {"Ctrl-Q": "toggleComment"},
-    tabSize: 2,
+    tabSize: this.settings.data.tabSize || 2,
+    indentUnit: this.settings.data.tabSize || 2,
+    indentWithTabs: this.settings.data.indentWithTabs || false,
     autoCloseBrackets: true,
     theme: this.settings.data.theme
   });
@@ -201,6 +203,15 @@ Repl.prototype.addEventListeners = function() {
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
   $('#resize')[0].addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
+
+  bus.on('settings:changed:tabSize', function(tabSize) {
+    this.editor.setOption('tabSize', tabSize);
+    this.editor.setOption('indentUnit', tabSize);
+  }, this);
+
+  bus.on('settings:changed:indentWithTabs', function(indentWithTabs) {
+    this.editor.setOption('indentWithTabs', indentWithTabs);
+  }, this);
 
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);
