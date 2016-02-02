@@ -12,7 +12,7 @@ Once you familiarize yourself with some of the concepts and features of ES6/ES20
 It uses one of two engines to transpile ES6/ES2015 to good-old-fashioned ES5: Google's [Traceur](https://github.com/google/traceur-compiler) and [Babel](https://github.com/babel/babel/). Select which one you want to use from the Settings panel. If there's a feature you want to use that isn't working, check the [compatibility table](http://kangax.github.io/compat-table/es6/) under those 2 columns to see if it's been implemented yet. 
 
 ### But why?
-Both [Traceur](https://google.github.io/traceur-compiler/demo/repl.html#) and Babel](https://babeljs.io/) already have their own REPLs. Why make a Chrome extension? For me it was just the convenience of being able to read a blog about a new feature or syntax and try it right there while I'm reading the article. Pop open the DevTools on the side of the page and give'r.
+Both [Traceur](https://google.github.io/traceur-compiler/demo/repl.html#) and [Babel](https://babeljs.io/) already have their own REPLs. Why make a Chrome extension? For me it was just the convenience of being able to read a blog about a new feature or syntax and try it right there while I'm reading the article. Pop open the DevTools on the side of the page and give'r.
 
 ![](https://s3.amazonaws.com/f.cl.ly/items/2b0E2v0L1z2z060j2l0m/scratch2.jpg)
 
