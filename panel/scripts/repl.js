@@ -42,7 +42,7 @@ Repl.prototype.onDomReady = function() {
     lineNumbers: true,
     matchBrackets: true,
     continueComments: "Enter",
-    extraKeys: {"Ctrl-Q": "toggleComment"},
+    extraKeys: {"Ctrl-Q": "toggleComment", "Ctrl-Space": "autocomplete"},
     tabSize: this.settings.data.tabSize || 2,
     indentUnit: this.settings.data.tabSize || 2,
     indentWithTabs: this.settings.data.indentWithTabs || false,
