@@ -19,6 +19,6 @@
   },
   "web_accessible_resources": [
     "node_modules/traceur/bin/traceur-runtime.js",
-    "node_modules/babel-core/browser-polyfill.min.js"
+    "node_modules/babel-polyfill/dist/polyfill.min.js"
   ]
 }
