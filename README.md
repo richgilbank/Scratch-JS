@@ -21,9 +21,8 @@ To get it running locally, you'll need to clone the repo, install gulp and other
 
 ```shell
 git clone git@github.com:richgilbank/Scratch-JS.git && cd Scratch-JS
-npm install -g gulp
 npm install
-gulp
+npm start
 ```
 
 You'll then need to install it locally in Chrome. Go to the URL `chrome://extensions` and select "Developer mode", then click "Load unpacked extension..." and select the root directory of the project. 

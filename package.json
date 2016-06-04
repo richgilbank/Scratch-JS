@@ -11,6 +11,9 @@
   "bugs": {
     "url": "https://github.com/richgilbank/Scratch-JS/issues"
   },
+  "scripts": {
+    "start": "gulp"
+  },
   "homepage": "https://github.com/richgilbank/Scratch-JS",
   "dependencies": {
     "babel-standalone": "1.0.0",
