@@ -4,9 +4,7 @@ function Repl() {
 
   var registered = bus.trigger('transformers:register');
   this.transformers = {};
-  registered.forEach(function(v) {
-    this.transformers[v.handle] = v;
-  }, this);
+  registered.forEach((transformer) => this.transformers[transformer.handle] = transformer);
 
   this.executionContext = 'top';
   this.settings = new Settings(this);
@@ -38,8 +36,6 @@ Repl.prototype.onDomReady = function() {
   this.addEventListeners(this);
 
   this.widgets = [];
-  this.width = window.innerWidth;
-  this.height = window.innerHeight;
 
   this.editor = CodeMirror.fromTextArea(this.DOM.inputTextArea, {
     lineNumbers: true,
@@ -60,38 +56,35 @@ Repl.prototype.onDomReady = function() {
     }
   }.bind(this));
 
-  var editor = this.editor;
-  chrome.runtime.sendMessage({name: 'getCode'}, function(data) {
+  chrome.runtime.sendMessage({name: 'getCode'}, (data) => {
     if (data.code) {
-      editor.setValue(data.code);
+      this.editor.setValue(data.code);
     }
   });
 }
 
 Repl.prototype.loadContexts = function() {
   chrome.devtools.inspectedWindow.getResources(function(resources) {
-
     var contexts = Array.prototype.filter.call(resources, function(resource) {
       if(resource.type === 'document') {
         if(resource.url === this.topLocation) return false;
         return true;
       }
       return false;
-    }).map(function(context) {
+    }).map(function(resource) {
       return {
-        url: context.url,
-        handle: context.url.split('/').slice(2).join('/').split('?')[0]
+        url: resource.url,
+        handle: resource.url.split('/').slice(2).join('/').split('?')[0]
       }
     });
 
     var optionString = '<option value="top">&lt;top frame&gt;</option>';
     contexts.forEach(function(resource) {
       var selectedString = resource.url === this.executionContext ? ' selected' : '';
-      optionString += '<option value="' + resource.url + '"' + selectedString + '>' + resource.handle + '</option>';
-    });
+      optionString += `<option value="${resource.url}" ${selectedString}>${resource.handle}</option>`;
+    }, this);
 
     this.DOM.contextSelector.innerHTML = optionString;
-
   }.bind(this));
 }
 
@@ -174,11 +167,6 @@ Repl.prototype.updateOutput = function() {
   } catch(e) {}
 }
 
-Repl.prototype.onWindowResize = function() {
-  this.width = window.innerWidth;
-  this.height = window.innerHeight;
-};
-
 Repl.prototype.onResizeMousedown = function() {
   var resizeOutput = this.resizeOutput.bind(this);
   this.DOM.body.classList.add('is-resizing');
@@ -191,11 +179,11 @@ Repl.prototype.onResizeMousedown = function() {
 
 Repl.prototype.resizeOutput = function(e) {
   if(this.DOM.output.classList.contains('is-right')) {
-    var percentWidth = e.x / this.width * 100;
+    var percentWidth = e.x / window.innerWidth * 100;
     this.DOM.input.style.width = percentWidth + "%";
     this.DOM.output.style.width = 100 - percentWidth + "%";
   } else {
-    var percentHeight = e.y / this.height * 100;
+    var percentHeight = e.y / window.innerHeight * 100;
     this.DOM.input.style.height = percentHeight + "%";
     this.DOM.output.style.height = 100 - percentHeight + "%";
   }
@@ -203,12 +191,10 @@ Repl.prototype.resizeOutput = function(e) {
 
 Repl.prototype.saveCode = function() {
   chrome.runtime.sendMessage({name: 'setCode', value: this.editor.getValue()});
-};
+}
 
 Repl.prototype.addEventListeners = function() {
-  this.DOM.executeScriptBtn.addEventListener('click', function(){
-    this.deliverContent(this.editor.getValue());
-  }.bind(this));
+  this.DOM.executeScriptBtn.addEventListener('click', () => this.deliverContent(this.editor.getValue()));
 
   this.DOM.toggleOutputBtn.addEventListener('click', (function(e) {
     var _e = e, i = 0, states = ['hidden', 'right', 'bottom'];
@@ -218,9 +204,7 @@ Repl.prototype.addEventListeners = function() {
     }.bind(this);
   }.bind(this))());
 
-  this.DOM.contextSelector.addEventListener('change', function(e) {
-    this.executionContext = this.value;
-  }.bind(this));
+  this.DOM.contextSelector.addEventListener('change', (evt) => this.executionContext = evt.target.value);
 
   document.addEventListener('keydown', debounce(this.updateOutput, 200, this));
   document.addEventListener('keydown', debounce(this.saveCode, 1000, this));
@@ -230,17 +214,7 @@ Repl.prototype.addEventListeners = function() {
     }
   }.bind(this));
 
-  window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
   this.DOM.resizeDivider.addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
-
-  bus.on('settings:changed:tabSize', function(tabSize) {
-    this.editor.setOption('tabSize', tabSize);
-    this.editor.setOption('indentUnit', tabSize);
-  }, this);
-
-  bus.on('settings:changed:indentWithTabs', function(indentWithTabs) {
-    this.editor.setOption('indentWithTabs', indentWithTabs);
-  }, this);
 
   bus.on('settings:changed:theme', function(theme) {
     this.editor.setOption('theme', theme);
@@ -251,14 +225,13 @@ Repl.prototype.addEventListeners = function() {
     this.DOM.topNav.className = classes.concat('top-nav').join(' ');
   }, this);
 
-  bus.on('settings:changed:transformer', function() {
-    this.updateOutput();
-  }, this);
-
-
-  bus.on('transformers:beforeTransform',function(loc,message){
-    this.removeWidgets();
-  }, this);
+  bus.on('settings:changed:tabSize', (tabSize) => {
+    this.editor.setOption('tabSize', tabSize);
+    this.editor.setOption('indentUnit', tabSize);
+  });
+  bus.on('settings:changed:indentWithTabs', (useTabs) => this.editor.setOption('indentWithTabs', useTabs));
+  bus.on('settings:changed:transformer', () => this.updateOutput());
+  bus.on('transformers:beforeTransform', () => this.removeWidgets());
 
   bus.on('transformers:error',function(err){
     var msgEl = document.createElement("div");

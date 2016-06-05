@@ -24,8 +24,7 @@ BabelTransformer.prototype.beforeTransform = function(){
 
 BabelTransformer.prototype.transform = function(input) {
   try {
-    var ret = Babel.transform(input, this.opts).code;
-    return `(function() { 'use strict'; ${ret} })();`;
+    return Babel.transform(input, this.opts).code;
   }
   catch(err) {
     if(err.name === "SyntaxError"){
