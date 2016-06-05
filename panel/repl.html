@@ -34,80 +34,74 @@
   </div>
   <div class="settings">
     <div class="settings__panel">
-      <a class="settings__close-btn" href="#">&#10006;</a>
-      <div class="settings__section">
+      <div class="settings__title">
         <h3 class="type--standard-weight">Settings</h3>
-      </div>
-      <hr />
-      <div class="settings__section">
         <div class="settings__spinner"></div>
-        <div class="settings__content">
-          <div class="settings-column">
-            <h4>Transformer</h4>
-            <div class="transformer-options"></div>
-          </div>
-          <div class="settings-column">
-            <h4>Editor</h4>
-            <div>
-              <div class="settings__option-container">
-                <label>Tab size</label>
-                <input type="number" name="tabSize">
-              </div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="checkbox" name="indentWithTabs">
-                  <span>Indent with tabs</span>
-                </label>
-              </div>
+        <a class="settings__close-btn" href="#">&#10006;</a>
+      </div>
+
+      <div class="settings__content">
+        <div class="settings-item">
+          <h4>Transformer</h4>
+          <div class="transformer-options"></div>
+        </div>
+        <div class="settings-item">
+          <h4>Editor</h4>
+          <div>
+            <div class="settings__option-container">
+              <label>Tab size</label>
+              <input type="number" name="tabSize">
             </div>
-          </div>
-          <div class="settings-column">
-            <h4>Theme</h4>
-            <div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="radio" name="theme" value="default">
-                  <span>Default</span>
-                </label>
-              </div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="radio" name="theme" value="solarized dark">
-                  <span>Solarized Dark</span>
-                </label>
-              </div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="radio" name="theme" value="monokai">
-                  <span>Monokai</span>
-                </label>
-              </div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="radio" name="theme" value="eclipse">
-                  <span>Eclipse</span>
-                </label>
-              </div>
-              <div class="settings__option-container">
-                <label>
-                  <input type="radio" name="theme" value="neo">
-                  <span>Neo</span>
-                </label>
-              </div>
+            <div class="settings__option-container">
+              <label>
+                <input type="checkbox" name="indentWithTabs">
+                <span>Indent with tabs</span>
+              </label>
             </div>
           </div>
         </div>
-      </div>
-      <div class="settings__section">
-        <h3 class="type--standard-weight">Includes</h3>
-      </div>
-      <hr>
-      <div class="settings__section">
-        <!--<div class="settings__spinner"></div>-->
-        <div class="settings-column center">
-          <div id="includesContainer">
+        <div class="settings-item">
+          <h4>Theme</h4>
+          <div>
+            <div class="settings__option-container">
+              <label>
+                <input type="radio" name="theme" value="default">
+                <span>Default</span>
+              </label>
+            </div>
+            <div class="settings__option-container">
+              <label>
+                <input type="radio" name="theme" value="solarized dark">
+                <span>Solarized Dark</span>
+              </label>
+            </div>
+            <div class="settings__option-container">
+              <label>
+                <input type="radio" name="theme" value="monokai">
+                <span>Monokai</span>
+              </label>
+            </div>
+            <div class="settings__option-container">
+              <label>
+                <input type="radio" name="theme" value="eclipse">
+                <span>Eclipse</span>
+              </label>
+            </div>
+            <div class="settings__option-container">
+              <label>
+                <input type="radio" name="theme" value="neo">
+                <span>Neo</span>
+              </label>
+            </div>
           </div>
         </div>
+        <div class="settings-item settings-item--full-width">
+          <h4>Additional Scripts</h4>
+          <div>
+            <div id="includesContainer"></div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>

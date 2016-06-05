@@ -26,30 +26,18 @@
 .settings__panel
   flex 0 0 auto
   align-self center
+  box-sizing border-box
   background #fff
-  width 40%
-  height 60%
-  min-width 500px
-  left 30%
-  top 20%
+  min-width 200px
+  max-height 100%
+  max-width 100%
   opacity 0
   box-shadow 0 5px 20px rgba(200, 200, 200, 0.8)
   border 1px solid #ddd
   pointer-events none
   transform scale(0.9) translateY(40px) rotateX(-20deg)
   transition all 200ms ease
-  overflow auto
-
-  @media (max-width: 500px)
-    min-width 0
-    width 80%
-    height 80%
-    left 10%
-    top 10%
-
-  @media (max-height: 450px)
-    height 100%
-    top 0
+  overflow hidden
 
   .settings.is-active &
     pointer-events auto
@@ -74,14 +62,31 @@
     background #ccc
     color #fff
 
-.settings__section
-  padding 0 1em
+.settings__title
+  border-bottom 1px solid #ccc
+  position fixed
+  top 0
+  left 0
+  width 100%
+  background #fff
+  z-index 5
+
+  h3
+    padding 0 20px
 
 .settings__content
+  padding 60px 20px 20px
   display flex
+  flex-wrap wrap
+  max-height 100%
+  overflow auto
+  box-sizing border-box
 
-.settings-column
+.settings-item
   flex 1 1 auto
+
+.settings-item--full-width
+  flex 1 1 100%
 
 .settings__option-container
   padding 3px
@@ -92,14 +97,17 @@
   input[type="checkbox"]
     position absolute
 
+  input[type="number"]
+    width 40px
+
   span
     padding-left 25px
     display inline-block
 
 .settings__spinner
   position absolute
-  bottom 10px
-  right 10px
+  top 15px
+  right 50px
   opacity 0
   display block
   width 24px
