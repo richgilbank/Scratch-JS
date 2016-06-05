@@ -19,7 +19,17 @@ TraceurTransformer.prototype.transform = function(input) {
     return compiler.compile(input);
   }
   catch(err) {
-    console.log('error', err.name);
+    if(err.name === "MultipleErrors"){
+      bus.trigger("transformers:error", {
+        name: 'SyntaxError',
+        message: err.message,
+        line: 0 // no err.line from traceur :'(
+      });
+    }
+    else {
+      throw err;
+    }
+    return null;
   }
 }
 

@@ -4,7 +4,8 @@ function Coffee() {
   this.name = 'CoffeeScript (' + this.getVersion() + ')';
   this.handle = 'coffee-script';
   this.opts = {
-    bare: true
+    bare: true,
+    filename: 'CoffeeScript'
   };
 }
 
@@ -25,7 +26,7 @@ Coffee.prototype.transform = function(input) {
     if(err.name === "SyntaxError"){
       bus.trigger("transformers:error", {
         name: 'SyntaxError',
-        message: err.message,
+        message: err.toString(),
         line: err.location.first_line,
         column: err.location.first_column
       });

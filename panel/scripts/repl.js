@@ -269,10 +269,8 @@ Repl.prototype.addEventListeners = function() {
     icon.innerHTML = "!";
     icon.className = "line-error-icon";
 
-    var message = "<pre>(" + (err.line + 1) + ":" + err.column + ") " + err.name + ": ";
+    var message = "<pre>" + err.name + ": ";
     message += err.message + "\n";
-    message += "|" + this.editor.getLine(err.line) + "\n";
-    message += "|" + xCharacters(err.column, ' ') + "^";
     message += "</pre>";
 
     var msgInfoEl = document.createElement("div");
