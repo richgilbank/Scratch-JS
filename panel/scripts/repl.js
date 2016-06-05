@@ -37,6 +37,7 @@ Repl.prototype.onDomReady = function() {
 
   this.widgets = [];
   this.width = window.innerWidth;
+  this.height = window.innerHeight;
 
   this.editor = CodeMirror.fromTextArea($('#input')[0], {
     lineNumbers: true,
@@ -121,7 +122,7 @@ Repl.prototype.deliverContent = function(content){
   }
 }
 
-Repl.prototype.toggleOutput = function(e) {
+Repl.prototype.toggleOutput = function(e, state) {
   this.output = this.output || CodeMirror.fromTextArea($('#output')[0], {
     lineNumbers: true,
     tabSize: 2,
@@ -129,11 +130,30 @@ Repl.prototype.toggleOutput = function(e) {
     theme: this.settings.data.theme
   });
 
-  this.DOM.output.classList.toggle('is-hidden');
-  this.DOM.input.classList.toggle('is-reduced');
-  this.DOM.input.style.width = "100%";
-
-  e.target.classList.toggle('is-open');
+  switch (state) {
+    case 'hidden':
+      this.DOM.output.classList.remove('is-bottom');
+      this.DOM.output.classList.add('is-hidden');
+      this.DOM.input.style.height = '100%';
+      this.DOM.output.style.height = '100%';
+      e.target.classList.remove('is-open');
+      break;
+    case 'right':
+      this.DOM.output.classList.remove('is-hidden');
+      this.DOM.output.classList.add('is-right');
+      this.DOM.input.style.width = '70%';
+      this.DOM.output.style.width = '30%';
+      e.target.classList.add('is-open');
+      break;
+    case 'bottom':
+      this.DOM.output.classList.remove('is-right');
+      this.DOM.output.classList.add('is-bottom');
+      this.DOM.input.style.width = '100%';
+      this.DOM.input.style.height = '70%';
+      this.DOM.output.style.width = '100%';
+      this.DOM.output.style.height = '30%';
+      break;
+  }
 
   if (!this.DOM.output.classList.contains('is-hidden')) {
     this.updateOutput();
@@ -156,6 +176,7 @@ Repl.prototype.updateOutput = function() {
 
 Repl.prototype.onWindowResize = function() {
   this.width = window.innerWidth;
+  this.height = window.innerHeight;
 };
 
 Repl.prototype.onResizeMousedown = function() {
@@ -169,9 +190,15 @@ Repl.prototype.onResizeMousedown = function() {
 };
 
 Repl.prototype.resizeOutput = function(e) {
-  var percentWidth = e.x / this.width * 100;
-  this.DOM.input.style.width = percentWidth + "%";
-  this.DOM.output.style.width = 100 - percentWidth + "%";
+  if(this.DOM.output.classList.contains('is-right')) {
+    var percentWidth = e.x / this.width * 100;
+    this.DOM.input.style.width = percentWidth + "%";
+    this.DOM.output.style.width = 100 - percentWidth + "%";
+  } else {
+    var percentHeight = e.y / this.height * 100;
+    this.DOM.input.style.height = percentHeight + "%";
+    this.DOM.output.style.height = 100 - percentHeight + "%";
+  }
 };
 
 Repl.prototype.saveCode = function() {
@@ -185,9 +212,13 @@ Repl.prototype.addEventListeners = function() {
     _this.deliverContent(_this.editor.getValue());
   });
 
-  $('#toggleOutput')[0].addEventListener('click', function(e){
-    _this.toggleOutput(e);
-  });
+  $('#toggleOutput')[0].addEventListener('click', (function(e) {
+    var _e = e, i = 0, states = ['hidden', 'right', 'bottom'];
+    return function(_e) {
+      i = ++i % states.length;
+      _this.toggleOutput(_e, states[i]);
+    }
+  })());
 
   this.DOM.contextSelector.addEventListener('change', function(e) {
     _this.executionContext = this.value;
