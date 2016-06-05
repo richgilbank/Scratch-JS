@@ -17,8 +17,15 @@ function Settings(repl) {
 
 Settings.prototype.onDomReady = function() {
   this.domReady = true;
+  this.DOM = {
+    transformerOptions: document.querySelector('.transformer-options'),
+    openSettingsBtn: document.querySelector('.open-settings'),
+    closeSettingsBtn: document.querySelector('.settings__close-btn'),
+    settings: document.querySelector('.settings'),
+    includedScriptsContainer: document.querySelector('#includesContainer'),
+  }
 
-  document.querySelector('.transformer-options').innerHTML = this.transformerOptionTemplate(this.repl.transformers);
+  this.DOM.transformerOptions.innerHTML = this.transformerOptionTemplate(this.repl.transformers);
 
   // Check for latest settings
   this.get(function(data) {
@@ -37,15 +44,15 @@ Settings.prototype.onDomReady = function() {
     }
   }.bind(this));
 
-  document.querySelector('.open-settings').addEventListener('click', function() {
-    document.querySelector('.settings').classList.toggle('is-active');
-  });
+  this.DOM.openSettingsBtn.addEventListener('click', function() {
+    this.DOM.settings.classList.toggle('is-active');
+  }.bind(this));
 
-  document.querySelector('.settings__close-btn').addEventListener('click', function() {
-    document.querySelector('.settings').classList.remove('is-active');
-  });
+  this.DOM.closeSettingsBtn.addEventListener('click', function() {
+    this.DOM.settings.classList.remove('is-active');
+  }.bind(this));
 
-  document.querySelector('.transformer-options').addEventListener('click', function(e) {
+  this.DOM.transformerOptions.addEventListener('click', function(e) {
     if(e.target.name === 'transformer')
       this.set({ transformer: e.target.value });
   }.bind(this));
@@ -71,16 +78,17 @@ Settings.prototype.onDomReady = function() {
     }.bind(this));
   }.bind(this));
 
-  document.querySelector('.settings').addEventListener('click', function(evt) {
+  this.DOM.settings.addEventListener('click', function(evt) {
+    // Delegate the listener, since new rows are added each time a
+    // script is added to the page
     if(!~Array.prototype.slice.call(evt.target.classList).indexOf('btn--add-source')) return;
     var button = evt.target;
     var input = button.previousElementSibling;
     var url = input.value;
-    var newRowString = this.newSourceRow();
     if(url.trim().length === 0) return;
-    chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + url + "\"]')", {}, function(result) {
+    chrome.devtools.inspectedWindow.eval(`!document.querySelector('script[src="${url}"]')`, {}, function(result) {
       if(!result) return;
-      var include = "var script=document.createElement('script');script.src='" + url + "';document.body.appendChild(script);";
+      var include = `var script=document.createElement('script');script.src='${url}';document.body.appendChild(script);`;
       chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
         if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException")) {
           logError(exceptionInfo.value);
@@ -88,26 +96,18 @@ Settings.prototype.onDomReady = function() {
           button.innerHTML = '&#10003;';
           button.disabled = true;
           input.readOnly = true;
-          document.querySelector('#includesContainer').appendChild(newRowString);
+          this.DOM.includedScriptsContainer.insertAdjacentHTML('beforeend', this.newSourceRow());
         }
-      });
+      }.bind(this));
     }.bind(this));
   }.bind(this));
 }
 
 Settings.prototype.newSourceRow = function() {
-  var row = document.createElement('div');
-  row.className = 'settings__option-container settings__includes-container';
-  var input = document.createElement('input');
-  input.type = 'text';
-  input.className = 'input--text';
-  input.placeholder='External source URL';
-  var button = document.createElement('button');
-  button.className = 'btn btn--add-source';
-  button.innerHTML = '&#10095;';
-  row.appendChild(input);
-  row.appendChild(button);
-  return row;
+  return `<div class="settings__option-container settings__includes-container">
+  <input type="text" class="input--text" placeholder="External source URL">
+  <button class="btn btn--add-source">&#10095</button>
+  </div>`;
 }
 
 Settings.prototype.transformerOptionTemplate = function(transformers) {
@@ -115,12 +115,12 @@ Settings.prototype.transformerOptionTemplate = function(transformers) {
   for(var i in transformers) {
     var t = transformers[i];
     template +=
-      '<div class="settings__option-container">' +
-        '<label>' +
-          '<input type="radio" name="transformer" value="' + t.handle + '"' + (t._active ? ' checked' : '') + '>' +
-          ' <span>' + t.name + '</span>' +
-        '</label>' +
-      '</div>'
+      `<div class="settings__option-container">
+        <label>
+          <input type="radio" name="transformer" value="${t.handle}" ${t.active ? 'checked' : ''}>
+          <span>${t.name}</span>
+        </label>
+      </div>`;
   }
   return template;
 }
