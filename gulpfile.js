@@ -10,6 +10,7 @@ var FILES = {
   copy: [
     '*.*',
     'node_modules',
+    '{art,art/**}',
     '!{panel,panel/**}',
     '!package.json',
     '!gulpfile.js'
@@ -56,8 +57,8 @@ gulp.task('usemin', ['clean'], function() {
     .pipe(gulp.dest(FILES.distPanel));
 });
 
-gulp.task('clean', function(cb) {
-  del([FILES.distAll, FILES.zip], {force: true}, cb);
+gulp.task('clean', function() {
+  return del([FILES.distAll, FILES.zip], {force: true});
 });
 
 gulp.task('zip', ['stylus', 'clean', 'usemin', 'copy'], function() {

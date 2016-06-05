@@ -1,6 +1,6 @@
 {
   "name": "Scratch-JS",
-  "version": "0.0.22",
+  "version": "0.0.23",
   "description": "Write ES6 (and other compile-to-JS languages) and execute it on a page from inside DevTools.",
   "repository": {
     "type": "git",
@@ -12,7 +12,8 @@
     "url": "https://github.com/richgilbank/Scratch-JS/issues"
   },
   "scripts": {
-    "start": "gulp"
+    "start": "gulp",
+    "build": "gulp -- build"
   },
   "homepage": "https://github.com/richgilbank/Scratch-JS",
   "dependencies": {
