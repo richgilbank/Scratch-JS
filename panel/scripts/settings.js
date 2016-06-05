@@ -2,7 +2,6 @@
   Settings and storage
  ---------------------------------*/
 function Settings(repl) {
-  var _this = this;
   this.domReady = false;
   this.repl = repl;
   this.DEFAULTS = this.data = {
@@ -17,27 +16,26 @@ function Settings(repl) {
 }
 
 Settings.prototype.onDomReady = function() {
-  var _this = this;
   this.domReady = true;
 
-  document.querySelector('.transformer-options').innerHTML = _this.transformerOptionTemplate(this.repl.transformers);
+  document.querySelector('.transformer-options').innerHTML = this.transformerOptionTemplate(this.repl.transformers);
 
   // Check for latest settings
   this.get(function(data) {
     // If there's no data stored, store the defaults
     if(typeof data === undefined || !data.hasOwnProperty('transformer')) {
-      _this.set(_this.DEFAULTS, function() {
-        _this.setFormDefaults(_this.data);
-      });
+      this.set(this.DEFAULTS, function() {
+        this.setFormDefaults(this.data);
+      }.bind(this));
     }
     else {
-      _this.data = data;
-      _this.setFormDefaults(data);
+      this.data = data;
+      this.setFormDefaults(data);
       for(key in data) {
         bus.trigger('settings:changed:' + key, data[key]);
       }
     }
-  });
+  }.bind(this));
 
   document.querySelector('.open-settings').addEventListener('click', function() {
     document.querySelector('.settings').classList.toggle('is-active');
@@ -49,36 +47,36 @@ Settings.prototype.onDomReady = function() {
 
   document.querySelector('.transformer-options').addEventListener('click', function(e) {
     if(e.target.name === 'transformer')
-      _this.set({ transformer: e.target.value });
-  });
+      this.set({ transformer: e.target.value });
+  }.bind(this));
 
   [].forEach.call(document.querySelectorAll('input[name="theme"]'), function (el) {
     el.addEventListener('click', function(e) {
-      _this.set({ theme: e.target.value });
-    });
-  });
+      this.set({ theme: e.target.value });
+    }.bind(this));
+  }.bind(this));
 
   [].forEach.call(document.querySelectorAll('input[name="tabSize"]'), function (el) {
     el.addEventListener('change', function(e) {
       var val = parseInt(e.target.value, 10);
-      _this.set({ tabSize: val });
-      _this.set({ indentUnit: val });
-    });
-  });
+      this.set({ tabSize: val });
+      this.set({ indentUnit: val });
+    }.bind(this));
+  }.bind(this));
 
   [].forEach.call(document.querySelectorAll('input[name="indentWithTabs"]'), function (el) {
     el.addEventListener('click', function(e) {
       var val = document.querySelectorAll('input[name="indentWithTabs"]')[0].checked;
-      _this.set({ indentWithTabs: val });
-    });
-  });
+      this.set({ indentWithTabs: val });
+    }.bind(this));
+  }.bind(this));
 
   document.querySelector('.settings').addEventListener('click', function(evt) {
     if(!~Array.prototype.slice.call(evt.target.classList).indexOf('btn--add-source')) return;
     var button = evt.target;
     var input = button.previousElementSibling;
     var url = input.value;
-    var newRowString = _this.newSourceRow();
+    var newRowString = this.newSourceRow();
     if(url.trim().length === 0) return;
     chrome.devtools.inspectedWindow.eval("!document.querySelector('script[src=\"" + url + "\"]')", {}, function(result) {
       if(!result) return;
@@ -94,7 +92,7 @@ Settings.prototype.onDomReady = function() {
         }
       });
     }.bind(this));
-  });
+  }.bind(this));
 }
 
 Settings.prototype.newSourceRow = function() {
@@ -147,18 +145,16 @@ Settings.prototype.loadingOff = function() {
 }
 
 Settings.prototype.get = function(cb) {
-  var _this = this;
   this.loadingOn();
   // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
   // chrome.storage.sync.get('settings', function(data) {
   chrome.runtime.sendMessage({name: 'getSettings'}, function(data) {
-    _this.loadingOff();
+    this.loadingOff();
     cb(data || {});
-  });
+  }.bind(this));
 }
 
 Settings.prototype.set = function(settings, cb) {
-  var _this = this;
   this.loadingOn();
   var updatedSettings = this.data;
   for(i in settings) {
@@ -167,13 +163,13 @@ Settings.prototype.set = function(settings, cb) {
   // FIXME: https://code.google.com/p/chromium/issues/detail?can=2&start=0&num=100&q=&colspec=ID%20Pri%20M%20Week%20ReleaseBlock%20Cr%20Status%20Owner%20Summary%20OS%20Modified&groupby=&sort=&id=178618
   // chrome.storage.sync.set({settings: settings}, function() {
   chrome.runtime.sendMessage({name: 'setSettings', value: updatedSettings}, function(data) {
-    _this.data = updatedSettings;
-    _this.loadingOff();
+    this.data = updatedSettings;
+    this.loadingOff();
     if(typeof cb === 'function')
       cb();
 
     for(key in settings) {
       bus.trigger('settings:changed:' + key, settings[key]);
     }
-  });
+  }.bind(this));
 }

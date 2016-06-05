@@ -25,13 +25,11 @@ function Repl() {
 }
 
 Repl.prototype.onDomReady = function() {
-  var _this = this;
-
   chrome.devtools.inspectedWindow.eval('document.location.href', function(currentUrl) {
-    _this.topLocation = currentUrl;
-    _this.loadContexts();
-    chrome.devtools.inspectedWindow.onResourceAdded.addListener(_this.loadContexts.bind(_this));
-  });
+    this.topLocation = currentUrl;
+    this.loadContexts();
+    chrome.devtools.inspectedWindow.onResourceAdded.addListener(this.loadContexts.bind(this));
+  }.bind(this));
 
   this.addEventListeners(this);
 
@@ -67,13 +65,11 @@ Repl.prototype.onDomReady = function() {
 }
 
 Repl.prototype.loadContexts = function() {
-  var _this = this;
-
   chrome.devtools.inspectedWindow.getResources(function(resources) {
 
     var contexts = Array.prototype.filter.call(resources, function(resource) {
       if(resource.type === 'document') {
-        if(resource.url === _this.topLocation) return false;
+        if(resource.url === this.topLocation) return false;
         return true;
       }
       return false;
@@ -86,13 +82,13 @@ Repl.prototype.loadContexts = function() {
 
     var optionString = '<option value="top">&lt;top frame&gt;</option>';
     contexts.forEach(function(resource) {
-      var selectedString = resource.url === _this.executionContext ? ' selected' : '';
+      var selectedString = resource.url === this.executionContext ? ' selected' : '';
       optionString += '<option value="' + resource.url + '"' + selectedString + '>' + resource.handle + '</option>';
     });
 
-    _this.DOM.contextSelector.innerHTML = optionString;
+    this.DOM.contextSelector.innerHTML = optionString;
 
-  });
+  }.bind(this));
 }
 
 Repl.prototype.removeWidgets = function(){
@@ -206,31 +202,29 @@ Repl.prototype.saveCode = function() {
 };
 
 Repl.prototype.addEventListeners = function() {
-  var _this = this;
-
   $('#executeScript')[0].addEventListener('click', function(){
-    _this.deliverContent(_this.editor.getValue());
-  });
+    this.deliverContent(this.editor.getValue());
+  }.bind(this));
 
   $('#toggleOutput')[0].addEventListener('click', (function(e) {
     var _e = e, i = 0, states = ['hidden', 'right', 'bottom'];
     return function(_e) {
       i = ++i % states.length;
-      _this.toggleOutput(_e, states[i]);
-    }
-  })());
+      this.toggleOutput(_e, states[i]);
+    }.bind(this);
+  }.bind(this))());
 
   this.DOM.contextSelector.addEventListener('change', function(e) {
-    _this.executionContext = this.value;
-  });
+    this.executionContext = this.value;
+  }.bind(this));
 
-  document.addEventListener('keydown', debounce(_this.updateOutput, 200, _this));
-  document.addEventListener('keydown', debounce(_this.saveCode, 1000, _this));
+  document.addEventListener('keydown', debounce(this.updateOutput, 200, this));
+  document.addEventListener('keydown', debounce(this.saveCode, 1000, this));
   document.addEventListener('keydown', function(e) {
     if(e[combinationKey] && e.which == 13) {
-      _this.deliverContent(_this.editor.getValue());
+      this.deliverContent(this.editor.getValue());
     }
-  });
+  }.bind(this));
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
   $('#resize')[0].addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
