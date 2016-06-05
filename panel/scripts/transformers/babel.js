@@ -5,6 +5,7 @@ function BabelTransformer() {
   this.handle = 'babel';
   this.runtimePath = 'node_modules/babel-polyfill/dist/polyfill.min.js'
   this.opts = {
+    filename: 'Babel',
     presets: [
       'es2015',
       'stage-0',
@@ -24,7 +25,7 @@ BabelTransformer.prototype.beforeTransform = function(){
 BabelTransformer.prototype.transform = function(input) {
   try {
     var ret = Babel.transform(input, this.opts).code;
-    return ret;
+    return `(function() { 'use strict'; ${ret} })();`;
   }
   catch(err) {
     if(err.name === "SyntaxError"){
