@@ -1,6 +1,3 @@
-/*----------------------------------
-  The Repl interface / app
- ---------------------------------*/
 var combinationKey = 'metaKey';
 
 function Repl() {
@@ -16,9 +13,16 @@ function Repl() {
 
   this.DOM = {
     body: document.body,
-    output: $('.output')[0],
-    input: $('.input')[0],
-    contextSelector: $('.execution-context-selector')[0]
+    output: document.querySelector('.output'),
+    outputTextArea: document.querySelector('#output'),
+    input: document.querySelector('.input'),
+    inputTextArea: document.querySelector('#input'),
+    contextSelector: document.querySelector('.execution-context-selector'),
+    combinationKey: document.querySelector('#combinationKey'),
+    executeScriptBtn: document.querySelector('#executeScript'),
+    toggleOutputBtn: document.querySelector('#toggleOutput'),
+    resizeDivider: document.querySelector('#resize'),
+    topNav: document.querySelector('.top-nav'),
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
@@ -37,7 +41,7 @@ Repl.prototype.onDomReady = function() {
   this.width = window.innerWidth;
   this.height = window.innerHeight;
 
-  this.editor = CodeMirror.fromTextArea($('#input')[0], {
+  this.editor = CodeMirror.fromTextArea(this.DOM.inputTextArea, {
     lineNumbers: true,
     matchBrackets: true,
     continueComments: "Enter",
@@ -52,9 +56,9 @@ Repl.prototype.onDomReady = function() {
   chrome.runtime.sendMessage({name: 'platformInfo'}, function(info) {
     if (info.os !== 'mac') {
       combinationKey = 'ctrlKey';
-      $('#combinationKey')[0].textContent = 'Ctrl';
+      this.DOM.combinationKey.textContent = 'Ctrl';
     }
-  });
+  }.bind(this));
 
   var editor = this.editor;
   chrome.runtime.sendMessage({name: 'getCode'}, function(data) {
@@ -119,7 +123,7 @@ Repl.prototype.deliverContent = function(content){
 }
 
 Repl.prototype.toggleOutput = function(e, state) {
-  this.output = this.output || CodeMirror.fromTextArea($('#output')[0], {
+  this.output = this.output || CodeMirror.fromTextArea(this.DOM.outputTextArea, {
     lineNumbers: true,
     tabSize: 2,
     readOnly: true,
@@ -202,11 +206,11 @@ Repl.prototype.saveCode = function() {
 };
 
 Repl.prototype.addEventListeners = function() {
-  $('#executeScript')[0].addEventListener('click', function(){
+  this.DOM.executeScriptBtn.addEventListener('click', function(){
     this.deliverContent(this.editor.getValue());
   }.bind(this));
 
-  $('#toggleOutput')[0].addEventListener('click', (function(e) {
+  this.DOM.toggleOutputBtn.addEventListener('click', (function(e) {
     var _e = e, i = 0, states = ['hidden', 'right', 'bottom'];
     return function(_e) {
       i = ++i % states.length;
@@ -227,7 +231,7 @@ Repl.prototype.addEventListeners = function() {
   }.bind(this));
 
   window.addEventListener('resize', debounce(this.onWindowResize.bind(this)), 200);
-  $('#resize')[0].addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
+  this.DOM.resizeDivider.addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
 
   bus.on('settings:changed:tabSize', function(tabSize) {
     this.editor.setOption('tabSize', tabSize);
@@ -243,8 +247,8 @@ Repl.prototype.addEventListeners = function() {
     if(this.output) this.output.setOption('theme', theme);
 
     // Set the top nav color
-    var classes = Array.prototype.slice.call($('.input .CodeMirror')[0].classList);
-    $('.top-nav')[0].className = classes.concat('top-nav').join(' ');
+    var classes = Array.prototype.slice.call(document.querySelector('.input .CodeMirror').classList);
+    this.DOM.topNav.className = classes.concat('top-nav').join(' ');
   }, this);
 
   bus.on('settings:changed:transformer', function() {
