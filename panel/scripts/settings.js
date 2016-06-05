@@ -78,36 +78,47 @@ Settings.prototype.onDomReady = function() {
     }.bind(this));
   }.bind(this));
 
-  this.DOM.settings.addEventListener('click', function(evt) {
-    // Delegate the listener, since new rows are added each time a
-    // script is added to the page
-    if(!~Array.prototype.slice.call(evt.target.classList).indexOf('btn--add-source')) return;
-    var button = evt.target;
-    var input = button.previousElementSibling;
-    var url = input.value;
-    if(url.trim().length === 0) return;
-    chrome.devtools.inspectedWindow.eval(`!document.querySelector('script[src="${url}"]')`, {}, function(result) {
-      if(!result) return;
-      var include = `var script=document.createElement('script');script.src='${url}';document.body.appendChild(script);`;
-      chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
-        if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException")) {
-          logError(exceptionInfo.value);
-        } else {
-          button.innerHTML = '&#10003;';
-          button.disabled = true;
-          input.readOnly = true;
-          this.DOM.includedScriptsContainer.insertAdjacentHTML('beforeend', this.newSourceRow());
-        }
-      }.bind(this));
-    }.bind(this));
-  }.bind(this));
+  // Add the first external source input row
+  this.DOM.includedScriptsContainer.insertAdjacentHTML('beforeend', this.newSourceRow());
+
+  this.DOM.settings.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    const button = evt.target.querySelector('button');
+    const input = evt.target.querySelector('input');
+    const src = input.value.trim();
+
+    if(src.length === 0) return;
+    this.addScriptToPage(src).then(() => {
+      button.innerHTML = '&#10003;';
+      button.disabled = true;
+      input.readOnly = true;
+      this.DOM.includedScriptsContainer.insertAdjacentHTML('beforeend', this.newSourceRow());
+      document.querySelector('form.settings__includes-container:last-child input').focus();
+    }).catch(() => logError(exceptionInfo.value));
+  });
 }
 
 Settings.prototype.newSourceRow = function() {
-  return `<div class="settings__option-container settings__includes-container">
+  return `<form action="" class="settings__option-container settings__includes-container">
   <input type="text" class="input--text" placeholder="External source URL">
-  <button class="btn btn--add-source">&#10095</button>
-  </div>`;
+  <button type="submit" class="btn btn--add-source">&#10095</button>
+  </form>`;
+}
+
+Settings.prototype.addScriptToPage = function(src) {
+  return new Promise((resolve, reject) => {
+    chrome.devtools.inspectedWindow.eval(`document.querySelector('script[src="${src}"]')`, {}, function(scriptExists) {
+      if(scriptExists) return;
+      var include = `var script=document.createElement('script');script.src='${src}';document.body.appendChild(script);`;
+      chrome.devtools.inspectedWindow.eval(include, {}, function (_, exceptionInfo) {
+        if (typeof exceptionInfo !== "undefined" && exceptionInfo.hasOwnProperty("isException")) {
+          reject(exceptionInfo.value);
+        } else {
+          resolve();
+        }
+      }.bind(this));
+    }.bind(this));
+  });
 }
 
 Settings.prototype.transformerOptionTemplate = function(transformers) {
