@@ -1,4 +1,4 @@
-function Traceur() {
+function TraceurTransformer() {
   Transformer.call(this);
 
   this.name = 'Traceur (' + this.getVersion() + ')';
@@ -7,13 +7,14 @@ function Traceur() {
 }
 
 // Inherit from Transformer
-Traceur.prototype = Object.create(Transformer.prototype);
-Traceur.prototype.constructor = Traceur;
+TraceurTransformer.prototype = Object.create(Transformer.prototype);
+TraceurTransformer.prototype.constructor = TraceurTransformer;
 
-Traceur.prototype.transform = function(input) {
+TraceurTransformer.prototype.transform = function(input) {
   try {
     var options = traceur.util.Options.experimental(true);
     options.script = true;
+    options.importRuntime = false; // https://github.com/google/traceur-compiler/issues/2126
     var compiler = new traceur.Compiler(options);
     return compiler.compile(input);
   }
@@ -22,9 +23,9 @@ Traceur.prototype.transform = function(input) {
   }
 }
 
-Traceur.prototype.getVersion = function() {
-  var loader = new traceur.runtime.TraceurLoader();
+TraceurTransformer.prototype.getVersion = function() {
+  var loader = new traceur.loader.TraceurLoader();
   return loader.version;
 }
 
-var traceurTransformer = new Traceur();
+var traceurTransformer = new TraceurTransformer();
