@@ -42,6 +42,9 @@ Repl.prototype.onDomReady = function() {
     matchBrackets: true,
     continueComments: "Enter",
     extraKeys: {
+      "Ctrl-J": (cm) => {
+        this.Vim.exitInsertMode(cm);
+      },
       "Ctrl-Q": "toggleComment",
       "Ctrl-Space": "autocomplete"
     },
@@ -49,8 +52,12 @@ Repl.prototype.onDomReady = function() {
     indentUnit: this.settings.data.tabSize || 2,
     indentWithTabs: this.settings.data.indentWithTabs || false,
     autoCloseBrackets: true,
-    theme: this.settings.data.theme
+    theme: this.settings.data.theme,
+    keyMap: this.settings.data.vimMode ? 'vim' : 'default'
   });
+
+  // Need to dig in to grab Vim
+  this.Vim = document.querySelector('.CodeMirror').CodeMirror.constructor.Vim
 
   chrome.runtime.sendMessage({name: 'platformInfo'}, function(info) {
     if (info.os !== 'mac') {
@@ -233,6 +240,7 @@ Repl.prototype.addEventListeners = function() {
     this.editor.setOption('indentUnit', tabSize);
   });
   bus.on('settings:changed:indentWithTabs', (useTabs) => this.editor.setOption('indentWithTabs', useTabs));
+  bus.on('settings:changed:vimMode', (vimMode) => this.editor.setOption('vimMode', vimMode));
   bus.on('settings:changed:transformer', () => this.updateOutput());
   bus.on('transformers:beforeTransform', () => this.removeWidgets());
 
