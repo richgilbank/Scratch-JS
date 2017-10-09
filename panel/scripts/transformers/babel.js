@@ -7,9 +7,13 @@ function BabelTransformer() {
   this.opts = {
     filename: 'Babel',
     presets: [
-      'es2015',
-      'stage-0',
-      'stage-1'
+      'latest',
+      'stage-0' // includes stages 0, 1, 2, and 3
+    ],
+    plugins: [
+      // disabled from stage-2 preset until update, see:
+      // https://babeljs.io/docs/plugins/preset-stage-2/
+      'transform-decorators-legacy'
     ]
   };
 }
