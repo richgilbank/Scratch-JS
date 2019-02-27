@@ -9,7 +9,8 @@ function Settings(repl) {
     tabSize: 2,
     indentUnit: 2,
     indentWithTabs: false,
-    theme: 'default'
+    theme: 'default',
+    vimMode: false
   }
 
   document.addEventListener('DOMContentLoaded', this.onDomReady.bind(this));
@@ -78,6 +79,13 @@ Settings.prototype.onDomReady = function() {
     }.bind(this));
   }.bind(this));
 
+  [].forEach.call(document.querySelectorAll('input[name="vimMode"]'), function (el) {
+    el.addEventListener('click', function(e) {
+      var val = document.querySelectorAll('input[name="vimMode"]')[0].checked;
+      this.set({ vimMode: val });
+    }.bind(this));
+  }.bind(this));
+
   // Add the first external source input row
   this.DOM.includedScriptsContainer.insertAdjacentHTML('beforeend', this.newSourceRow());
 
@@ -140,6 +148,7 @@ Settings.prototype.setFormDefaults = function() {
   document.querySelector('[name="theme"][value="' + this.data.theme + '"]').checked = true;
   document.querySelector('[name="tabSize"]').value = this.data.tabSize;
   document.querySelector('[name="indentWithTabs"]').checked = this.data.indentWithTabs;
+  document.querySelector('[name="vimMode"]').checked = this.data.vimMode;
 }
 
 Settings.prototype.loadingOn = function() {
