@@ -216,6 +216,11 @@ Repl.prototype.addEventListeners = function() {
       this.deliverContent(this.editor.getValue());
     }
   }.bind(this));
+  document.addEventListener('keydown', function(e) {
+    if(e.key === '?') {
+      e.stopPropagation();
+    }
+  }, true);
 
   this.DOM.resizeDivider.addEventListener('mousedown', debounce(this.onResizeMousedown.bind(this)), 200);
 
