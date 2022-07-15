@@ -1,9 +1,11 @@
 {
   "name": "Scratch JS",
-  "version": "0.0.26",
+  "version": "0.0.25",
   "description": "Write and execute ES6/ES2015 within DevTools!",
   "devtools_page": "es6-repl.html",
   "manifest_version": 3,
+  "offline_enabled": true,
+  "minimum_chrome_version": "93",
   "icons": {
     "128": "art/128.png",
     "48": "art/48.png",
@@ -24,5 +26,6 @@
       ],
       "matches": ["<all_urls>"]
     }
-  ]
+  ],
+  "incognito": "split"
 }
